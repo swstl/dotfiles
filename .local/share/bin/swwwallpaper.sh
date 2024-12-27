@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Ensure WALLPAPER_DIR is set
-WALLPAPER_DIR="${WALLPAPER_DIR:-/home/who/Backgrounds}"
+WALLPAPER_DIR="${WALLPAPER_DIR:-$HOME/.dotfiles/Backgrounds}"
 
 # Validate that WALLPAPER_DIR exists
 if [ ! -d "$WALLPAPER_DIR" ]; then
