@@ -1,0 +1,23 @@
+theme = "my-transparent-theme"
+
+[editor.explorer]
+column-width = 20
+
+[keys.normal]
+"j" = "move_visual_line_up"
+"k" = "move_visual_line_down"
+
+[keys.select]
+"j" = "extend_visual_line_up"
+"k" = "extend_visual_line_down"
+
+[keys.normal.z]
+"j" = "scroll_up"
+"k" = "scroll_down"
+
+[keys.normal.Z]
+"j" = "scroll_up"
+"k" = "scroll_down"
+
+[editor.soft-wrap]
+enable = true

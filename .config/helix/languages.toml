@@ -1,0 +1,21 @@
+[language-server.pylsp.config.pylsp]
+plugins.black.enabled = true
+plugins.pylint.enabled = true
+plugins.pyflakes.enabled = false
+plugins.pyls_mypy.enabled = true
+plugins.pyls_mypy.live_mode = false
+plugins.isort.enabled = true
+plugins.rope_autoimport.enabled = true
+
+
+[[language]]
+name = "c"
+formatter = { command = "clang-format" }
+auto-format = true
+file-types = ["c", "h"]
+
+[[language]]
+name = "cpp"
+formatter = { command = "clang-format" }
+auto-format = true
+file-types = ["cpp", "h"]
