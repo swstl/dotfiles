@@ -152,18 +152,17 @@ export START_INDEX=10
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('~/DevStuff/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/who/DevStuff/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "~/DevStuff/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "~/DevStuff/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/who/DevStuff/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/who/DevStuff/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="~/DevStuff/anaconda3/bin:$PATH"
+        export PATH="/home/who/DevStuff/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
-export QT_QPA_PLATFORM_PLUGIN_PATH="/usr/lib/qt/plugins"
 # <<< conda initialize <<<
 
 
