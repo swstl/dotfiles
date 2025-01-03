@@ -106,6 +106,7 @@ alias cr='mpv --yt-dlp-raw-options=cookies-from-browser=brave'
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT1'
 alias y='yazi'
 alias c='c'
+alias n='nvim'
 lsfind ()
 {
     ll "$1" | grep "$2"
