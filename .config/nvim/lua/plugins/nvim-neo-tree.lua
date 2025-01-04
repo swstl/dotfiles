@@ -9,5 +9,14 @@ return {
     },
     config = function()
         vim.keymap.set("n", "<C-;>", ":Neotree focus<CR>", {})
+        -- Autocommand to close Neo-tree when quitting Neovim
+        vim.api.nvim_create_autocmd("QuitPre", {
+            callback = function()
+                -- Close Neo-tree if it's open
+                if #vim.fn.getbufinfo({ bufloaded = true, buftype = "nofile" }) > 0 then
+                    vim.cmd("Neotree close")
+                end
+            end,
+        })
     end,
 }
