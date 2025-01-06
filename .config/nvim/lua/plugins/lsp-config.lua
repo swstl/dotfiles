@@ -29,7 +29,9 @@ return {
 			lspconfig.vuels.setup({ capabilities = capabilities })
 			lspconfig.yamlls.setup({ capabilities = capabilities })
 			lspconfig.marksman.setup({ capabilities = capabilities })
-			lspconfig.pylsp.setup({ capabilities = capabilities })
+			lspconfig.pylsp.setup({
+				capabilities = capabilities
+			})
 			lspconfig.omnisharp.setup({ capabilities = capabilities })
 
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
@@ -37,6 +39,7 @@ return {
 			vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {})
 			vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+			vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
 		end,
 	},
 }
