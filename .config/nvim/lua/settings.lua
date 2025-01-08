@@ -1,4 +1,3 @@
-
 -- behaviour
 vim.cmd("set expandtab")
 vim.cmd("set tabstop=4")
@@ -6,16 +5,26 @@ vim.cmd("set softtabstop=4")
 vim.cmd("set shiftwidth=4")
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 
 --------- keymapping ----------
 vim.g.mapleader = " "
-vim.api.nvim_set_keymap('n', 'j', 'k', { noremap = true })
-vim.api.nvim_set_keymap('n', 'k', 'j', { noremap = true })
-vim.api.nvim_set_keymap('v', 'j', 'k', { noremap = true })
-vim.api.nvim_set_keymap('v', 'k', 'j', { noremap = true })
-vim.keymap.set({'n', 'v'}, '<leader>y', '"+y', {desc = 'Yank to clipboard'})
-vim.keymap.set('n', '<C-c>', 'gcc', { remap = true, desc = 'Toggle comment' })
-vim.keymap.set('v', '<C-c>', 'gc', { remap = true, desc = 'Toggle comment' })
+vim.api.nvim_set_keymap("n", "j", "k", { noremap = true })
+vim.api.nvim_set_keymap("n", "k", "j", { noremap = true })
+vim.api.nvim_set_keymap("v", "j", "k", { noremap = true })
+vim.api.nvim_set_keymap("v", "k", "j", { noremap = true })
 
+-- Treesitter Incremental Selection
+vim.keymap.set("v", "<A-o>", function()
+	-- Increment the selection in visual mode
+	vim.api.nvim_feedkeys("grn", "v", true)
+end, { desc = "Treesitter Incremental Selection with Alt-o in Visual Mode" })
+
+vim.keymap.set("v", "<A-i>", function()
+	-- Decrement the selection in visual mode
+	vim.api.nvim_feedkeys("grm", "v", true)
+end, { desc = "Treesitter Decremental Selection with Alt-i in Visual Mode" })
+
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
+vim.keymap.set("n", "<C-c>", "gcc", { remap = true, desc = "Toggle comment" })
+vim.keymap.set("v", "<C-c>", "gc", { remap = true, desc = "Toggle comment" })
