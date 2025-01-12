@@ -5,10 +5,6 @@ return {
       "nvimtools/none-ls-extras.nvim",
     },
     config = function()
-
-      local venv_path =
-      'import sys; sys.path.append("/usr/lib/python3.13/site-packages"); import pylint_venv; pylint_venv.inithook(force_venv_activation=True, quiet=True)'
-
       local null_ls = require("null-ls")
 
       null_ls.setup({
@@ -31,9 +27,7 @@ return {
           -- python
           null_ls.builtins.formatting.black,
           null_ls.builtins.formatting.isort,
-          null_ls.builtins.diagnostics.pylint.with({
-            extra_args = { "--init-hook", venv_path },
-          }),
+          null_ls.builtins.diagnostics.pylint,
         },
       })
 
@@ -41,3 +35,19 @@ return {
     end,
   },
 }
+
+
+-- solution if pylint cant find venv modules : 
+-- install "linux-cultist/venv-selector.nvim" 
+-- and add the path to the venvs to it:
+--    require("venv-selector").setup({
+--      settings = {
+--         search = {
+--           anaconda_envs = {
+--             command = "fd /bin/python$ /home/who/DevStuff/anaconda3/envs --full-path --color never -E /proc",
+--             type = "anaconda",
+--           },
+--         },
+--       },
+--     })
+
