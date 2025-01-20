@@ -108,7 +108,6 @@ alias cr='mpv --yt-dlp-raw-options=cookies-from-browser=brave'
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT1'
 alias y='yazi'
 alias c='c'
-alias n='nvim'
 lsfind ()
 {
     ll "$1" | grep "$2"
@@ -230,3 +229,29 @@ export PATH=$JAVA_HOME/bin:$PATH
 # >>> emscripten (webassembly:) >>> 
 source /etc/profile.d/emscripten.sh
 # <<< emscripten (webassembly:) <<<
+
+# >>> nvim configurations >>>
+# for fast commands:
+alias nvim-lazy="NVIM_APPNAME=Lazyvim nvim"
+alias n="NVIM_APPNAME=mynvim nvim"
+
+# to select the nvim config via terminal
+function nvims() {
+  items=('default' 'Lazyvim' 'mynvim')
+  config=$(printf "%s\n" "${items[@]}" | fzf --prompt="Neovim Config: " --height=~50% --layout=reverse --border --exit-0)
+
+  if [[ -z $config ]]; then
+    echo "Nothing selected"
+    return 0
+  elif [[ $config == "default" ]]; then
+    config=""
+  fi
+
+  NVIM_APPNAME=$config nvim $@
+}
+
+alias ns="nvims"
+# if a keybinding i sneeded:
+#bindkey -s ^n "nvims\n"
+
+# <<< nvim configurations <<<

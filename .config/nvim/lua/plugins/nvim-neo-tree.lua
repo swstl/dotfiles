@@ -8,7 +8,19 @@ return {
 		-- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 	},
 	config = function()
-		vim.keymap.set("n", "<C-;>", ":Neotree focus<CR>", {})
+		vim.keymap.set("n", "<C-;>", function()
+			-- Check if Neo-tree is currently open
+			local is_open = vim.fn.bufname():match("neo%-tree")
+
+			if is_open then
+				-- Close Neo-tree if it's open
+				vim.cmd("Neotree close")
+			else
+				-- Focus Neo-tree if it's not open
+				vim.cmd("Neotree focus")
+			end
+		end, {})
+
 		-- Autocommand to close Neo-tree when quitting Neovim
 		vim.api.nvim_create_autocmd("QuitPre", {
 			callback = function()
