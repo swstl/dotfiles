@@ -232,7 +232,7 @@ source /etc/profile.d/emscripten.sh
 
 # >>> nvim configurations >>>
 # for fast commands:
-alias nvim-lazy="NVIM_APPNAME=Lazyvim nvim"
+alias nl="NVIM_APPNAME=Lazyvim nvim"
 alias n="NVIM_APPNAME=mynvim nvim"
 
 # to select the nvim config via terminal

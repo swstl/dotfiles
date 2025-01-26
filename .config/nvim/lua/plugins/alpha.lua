@@ -30,22 +30,32 @@ return {
 					},
 					{
 						icon = "  ",
-						desc = "Find File                               ",
+						desc = "Find a specific file                    ",
 						action = "Telescope find_files find_command=rg,--hidden,--files",
 					},
 					{
 						icon = "  ",
-						desc = "File Browser                            ",
+						desc = "Browse directories                      ",
 						action = "Telescope file_browser",
 					},
 					{
 						icon = "  ",
-						desc = "Find word                               ",
+						desc = "Search for a word in project            ",
 						action = "Telescope live_grep",
+					},
+					{
+						icon = "󰊢  ",
+						desc = "Open Neovim configuration               ",
+						action = "edit ~/.config/nvim/init.lua",
+					},
+					{
+						icon = "󰁔  ",
+						desc = "Quit Neovim                             ",
+						action = "qa",
 					},
 				},
 				footer = {
-					"Neovim Dashboard with Custom Logo",
+					"Using configs: " .. os.getenv("NVIM_APPNAME"),
 				},
 			},
 		})
