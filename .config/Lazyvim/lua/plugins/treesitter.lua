@@ -28,12 +28,39 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
-      -- add tsx and treesitter
-      vim.list_extend(opts.ensure_installed, {
+      -- Ensure `ensure_installed` is properly merged
+      opts.ensure_installed = vim.tbl_deep_extend("force", opts.ensure_installed or {}, {
         "vue",
         "css",
+        "typescript",
+        "javascript",
+        "html",
+        { "r", "rnoweb" },
       })
-      opts.auto_install = true
+
+      -- Add additional Treesitter configurations dynamically
+      opts.incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<A-o>", -- Initialize selection
+          node_incremental = "grn", -- Increment to the next node
+          scope_incremental = "grc", -- Increment to the current scope
+          node_decremental = "grm", -- Decrement selection
+        },
+      }
+
+      opts.textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ["af"] = "@function.outer", -- Select around a function
+            ["if"] = "@function.inner", -- Select inside a function
+            ["ac"] = "@class.outer", -- Select around a class
+            ["ic"] = "@class.inner", -- Select inside a class
+          },
+        },
+      }
     end,
   },
 }

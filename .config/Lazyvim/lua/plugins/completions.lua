@@ -2,9 +2,10 @@ return {
   -- override nvim-cmp and add cmp-emoji
   {
     "hrsh7th/nvim-cmp",
-    dependencies = { "hrsh7th/cmp-emoji" },
+    dependencies = { "hrsh7th/cmp-emoji", "R-nvim/cmp-r" },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
+      table.insert(opts.sources, { name = "cmp_r" })
       table.insert(opts.sources, { name = "emoji" })
     end,
     config = function()

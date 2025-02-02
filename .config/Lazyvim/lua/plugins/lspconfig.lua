@@ -1,17 +1,4 @@
 return {
-  -- add pyright to lspconfig
-  {
-    "neovim/nvim-lspconfig",
-    ---@class PluginLspOpts
-    opts = {
-      ---@type lspconfig.options
-      servers = {
-        -- pyright will be automatically installed with mason and loaded with lspconfig
-        pyright = {},
-      },
-    },
-  },
-
   -- add tsserver and setup with typescript.nvim instead of lspconfig
   {
     "neovim/nvim-lspconfig",
@@ -31,6 +18,16 @@ return {
       servers = {
         -- tsserver will be automatically installed with mason and loaded with lspconfig
         tsserver = {},
+        -- pylyzer = {},
+        pyright = {},
+        r_language_server = {
+          root_dir = function(fname)
+            return require("lspconfig.util").root_pattern("DESCRIPTION", "NAMESPACE", ".Rbuildignore")(fname)
+              ---@diagnostic disable-next-line: deprecated
+              or require("lspconfig.util").find_git_ancestor(fname)
+              or vim.loop.os_homedir()
+          end,
+        },
       },
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
@@ -50,6 +47,7 @@ return {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
+        -- "pylyzer",
         "stylua",
         "shellcheck",
         "shfmt",
@@ -58,5 +56,8 @@ return {
         "eslint_d",
       },
     },
+  },
+  {
+    "shunsambongi/neotest-testthat",
   },
 }

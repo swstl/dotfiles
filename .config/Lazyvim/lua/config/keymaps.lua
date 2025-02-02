@@ -38,3 +38,14 @@ map("n", "+", function()
 end, { desc = "Format with conform.nvim" })
 
 map("n", "_", vim.lsp.buf.format, { desc = "Format with LSP" })
+
+-- Treesitter Decremental Selection
+map("v", "<A-i>", function()
+  -- Decrement the selection in visual mode
+  vim.api.nvim_feedkeys("grm", "v", true)
+end, { desc = "Treesitter Decremental Selection with Alt-i in Visual Mode" })
+-- Treesitter Incremental Selection
+map("v", "<A-o>", function()
+  -- Increment the selection in visual mode
+  vim.api.nvim_feedkeys("grn", "v", true)
+end, { desc = "Treesitter Incremental Selection with Alt-o in Visual Mode" })
