@@ -3,6 +3,7 @@
 -- Add any additional keymaps here
 
 local map = vim.keymap.set
+vim.g.maplocalleader = "\\"
 
 -- Swap 'j' and 'k' in normal and visual modes
 map({ "n", "v" }, "j", "k", { noremap = true, silent = true })
