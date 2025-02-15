@@ -1,11 +1,40 @@
 #!/bin/bash
 
-screenshot_dir="$HOME/Pictures/Screenshots"
-timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
+freeze_screen() {
+  grim - | swappy -f - &
+  sleep 0.1
+}
+
+unfreeze_screen() {
+  pkill swappy
+}
 
 case "$1" in
-    s) grim -g "$(slurp)" "$screenshot_dir/screenshot_$timestamp.png" ;; # Select area
-    sf) grim -g "$(slurp)" -f "$screenshot_dir/screenshot_$timestamp.png" ;; # Frozen select area
-    m) grim -o "$screenshot_dir/monitor_$timestamp.png" ;; # Active monitor
-    p) grim "$screenshot_dir/allmonitors_$timestamp.png" ;; # All monitors
+s) # Select Area Screenshot (Frozen)
+  freeze_screen
+  grim -g "$(slurp)" - | wl-copy
+  unfreeze_screen
+  notify-send "Screenshot copied to clipboard!"
+  ;;
+
+sf) # Select Area Screenshot (Frozen)
+  freeze_screen
+  grim -g "$(slurp)" - | wl-copy
+  unfreeze_screen
+  notify-send "Screenshot copied to clipboard!"
+  ;;
+
+m) # Active Monitor Screenshot (Frozen)
+  freeze_screen
+  grim -o "$(hyprctl activewindow -j | jq -r '.monitor')" - | wl-copy
+  unfreeze_screen
+  notify-send "Screenshot copied to clipboard!"
+  ;;
+
+p) # All Monitors Screenshot (Frozen)
+  freeze_screen
+  grim - | wl-copy
+  unfreeze_screen
+  notify-send "Screenshot copied to clipboard!"
+  ;;
 esac
