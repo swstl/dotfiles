@@ -174,8 +174,8 @@ export PATH=$PATH:/usr/lib/qt6/bin
 
 
 # >>> sudoedit >>>
-export EDITOR=helix
-export VISUAL=helix
+export EDITOR="$HOME/.config/Lazyvim/EDITOR.sh"  
+export VISUAL="$HOME/.config/Lazyvim/EDITOR.sh"  
 # <<< sudoedit <<< 
 
 # >>> sddm >>>

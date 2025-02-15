@@ -1,0 +1,5 @@
+keybinding:
+  universal:
+    prevItem-alt: 'j'  # Originally 'k' (moves up)
+    nextItem-alt: 'k'  # Originally 'j' (moves down)
+
