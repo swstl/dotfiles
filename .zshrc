@@ -145,7 +145,6 @@ eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 
 # >>> hyprland scripts >>>
-export WALLPAPER_DIR="$HOME/.dotfiles/Backgrounds"
 export START_INDEX=10
 # <<< hyprland scripts <<<
 

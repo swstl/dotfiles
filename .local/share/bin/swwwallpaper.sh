@@ -1,64 +1,56 @@
 #!/bin/bash
 
-# Ensure WALLPAPER_DIR is set
-WALLPAPER_DIR="${WALLPAPER_DIR:-$HOME/.dotfiles/Backgrounds}"
+CONFIG_FILE="$HOME/.config/wp_dr"
 
-# Validate that WALLPAPER_DIR exists
+INDEX_FILE="$HOME/.config/wp_in"
+
+DEFAULT_DIR="$HOME/.dotfiles/Backgrounds"
+
+WALLPAPER_DIR=$(cat "$CONFIG_FILE" 2>/dev/null || echo "$DEFAULT_DIR")
+
 if [ ! -d "$WALLPAPER_DIR" ]; then
     echo "Error: Wallpaper directory '$WALLPAPER_DIR' does not exist."
+    notify-send "Error: Invalid wallpaper directory!"
     exit 1
 fi
 
-# File to keep track of the current wallpaper index
-INDEX_FILE="${WALLPAPER_DIR}/index"
+mapfile -t wallpapers < <(find "$WALLPAPER_DIR" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' \))
 
-# Get the list of wallpapers
-wallpapers=("$WALLPAPER_DIR"/*.jpg)
-
-# Total number of wallpapers
 total_wallpapers=${#wallpapers[@]}
 
-# Check if wallpapers are available
-if [ $total_wallpapers -eq 0 ]; then
+if [ "$total_wallpapers" -eq 0 ]; then
     echo "Error: No wallpapers found in '$WALLPAPER_DIR'."
+    notify-send "No wallpapers found!"
     exit 1
 fi
 
-# Ensure the index file exists
 if [ ! -f "$INDEX_FILE" ]; then
-    echo $START_INDEX > "$INDEX_FILE"
+    echo 0 > "$INDEX_FILE"
 fi
 
-# Read the current index from the file
 CURRENT_INDEX=$(cat "$INDEX_FILE")
 
-# Parse the script arguments
+if [ "$CURRENT_INDEX" -ge "$total_wallpapers" ]; then
+    CURRENT_INDEX=0
+fi
+
 case "$1" in
     -n|--next)
-        # Move to the next wallpaper
         ((CURRENT_INDEX++))
-        if [ $CURRENT_INDEX -ge $total_wallpapers ]; then
-            CURRENT_INDEX=0
-        fi
-        echo $CURRENT_INDEX
+        ((CURRENT_INDEX >= total_wallpapers)) && CURRENT_INDEX=0
         ;;
     -p|--previous)
-        # Move to the previous wallpaper
         ((CURRENT_INDEX--))
-        if [ $CURRENT_INDEX -lt 0 ]; then
-            CURRENT_INDEX=$((total_wallpapers - 1))
-        fi
-        echo $CURRENT_INDEX
+        ((CURRENT_INDEX < 0)) && CURRENT_INDEX=$((total_wallpapers - 1))
         ;;
     *)
         swww-daemon
-        swww img --transition-duration 0 -t none "${wallpapers[$START_INDEX]}"
+        swww img --transition-duration 0 -t none "${wallpapers[0]}"
         exit 1
         ;;
 esac
 
-# Save the updated index to the file
-echo $CURRENT_INDEX > "$INDEX_FILE"
+echo "$CURRENT_INDEX" > "$INDEX_FILE"
 
-# Set the wallpaper using swww
 swww img --transition-duration 0 -t none "${wallpapers[$CURRENT_INDEX]}"
+
