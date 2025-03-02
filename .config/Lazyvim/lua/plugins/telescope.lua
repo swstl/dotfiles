@@ -10,6 +10,11 @@ return {
         function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
         desc = "Find Plugin File",
       },
+      {
+        "<leader>/",
+        function() require("telescope.builtin").live_grep({ cwd = vim.loop.cwd() }) end,
+        desc = "Grep (cwd)",
+      },
     },
     -- change some options
     opts = {
