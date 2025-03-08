@@ -3,9 +3,9 @@
 -- Add any additional options here
 
 vim.opt.clipboard = ""
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.softtabstop = 2
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 
 vim.g.autoformat = false

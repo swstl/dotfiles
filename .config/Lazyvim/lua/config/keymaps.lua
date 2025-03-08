@@ -50,3 +50,10 @@ map("v", "<A-o>", function()
   -- Increment the selection in visual mode
   vim.api.nvim_feedkeys("grn", "v", true)
 end, { desc = "Treesitter Incremental Selection with Alt-o in Visual Mode" })
+
+
+-- iron
+vim.keymap.set("n", "<space>rs", "<cmd>IronRepl<cr>")
+vim.keymap.set("n", "<space>rr", "<cmd>IronRestart<cr>")
+vim.keymap.set("n", "<space>rF", "<cmd>IronFocus<cr>")
+vim.keymap.set("n", "<space>rh", "<cmd>IronHide<cr>")
