@@ -79,6 +79,7 @@ alias mkdir='mkdir -p'
 alias vim='nvim'
 alias grep='rg --color=auto'
 alias diff='colordiff'
+alias rtop='radeontop'
 
 # Git Aliases
 alias gac='git add . && git commit -m'
