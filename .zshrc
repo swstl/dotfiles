@@ -256,3 +256,8 @@ alias ns="nvims"
 #bindkey -s ^n "nvims\n"
 
 # <<< nvim configurations <<<
+#
+
+# >>> spacetimeDB >>>
+export PATH="/stdb:$PATH"
+# <<< spacetimeDB <<<
