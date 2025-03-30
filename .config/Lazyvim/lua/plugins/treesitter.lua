@@ -35,7 +35,8 @@ return {
         "typescript",
         "javascript",
         "html",
-        { "r", "rnoweb" },
+        "r",
+        "rnoweb"
       })
 
       -- Add additional Treesitter configurations dynamically
