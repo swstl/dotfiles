@@ -57,3 +57,13 @@ vim.keymap.set("n", "<space>rs", "<cmd>IronRepl<cr>")
 vim.keymap.set("n", "<space>rr", "<cmd>IronRestart<cr>")
 vim.keymap.set("n", "<space>rF", "<cmd>IronFocus<cr>")
 vim.keymap.set("n", "<space>rh", "<cmd>IronHide<cr>")
+
+
+
+-- augment
+map("n", "<leader>ac", "<cmd>Augment chat<cr>", { desc = "Augment chat" })
+map("v", "<leader>ac", "<cmd>Augment chat<cr>", { desc = "Augment chat" })
+map("n", "<leader>an", "<cmd>Augment chat-new<cr>", { desc = "Augment new chat" })
+map("n", "<leader>at", "<cmd>Augment chat-toggle<cr>", { desc = "Augment toggle chat" })
+
+
