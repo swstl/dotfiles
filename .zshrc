@@ -95,7 +95,7 @@ alias download='aria2c --split=16 --max-connection-per-server=16 --timeout=600 -
 # VPN Aliases
 # alias vpn-up='sudo tailscale up --exit-node=raspberrypi --accept-routes'
 # alias vpn-down='sudo tailscale down'
-alias vpn='expressvpn'
+alias vpn='expressvpnctl'
 
 warp ()
 {
@@ -228,6 +228,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 # <<< java <<<
 
 # >>> emscripten (webassembly:) >>> 
+# >>> files are not added in dotfiles, remove if not needed
 source /etc/profile.d/emscripten.sh
 # <<< emscripten (webassembly:) <<<
 
