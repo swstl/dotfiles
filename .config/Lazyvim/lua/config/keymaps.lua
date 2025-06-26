@@ -67,3 +67,5 @@ map("n", "<leader>an", "<cmd>Augment chat-new<cr>", { desc = "Augment new chat" 
 map("n", "<leader>at", "<cmd>Augment chat-toggle<cr>", { desc = "Augment toggle chat" })
 
 
+map("n", "gn", "``", { desc = "Jump to exact position at previous mark" })
+
