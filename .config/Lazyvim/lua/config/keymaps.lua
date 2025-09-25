@@ -9,6 +9,18 @@ vim.g.maplocalleader = "\\"
 map({ "n", "v" }, "j", "k", { noremap = true, silent = true })
 map({ "n", "v" }, "k", "j", { noremap = true, silent = true })
 
+-- Normal mode
+map('n', '<C-j>', '<C-w>k', { desc = 'Move to window above' })
+map('n', '<C-k>', '<C-w>j', { desc = 'Move to window below' })
+map('n', '<C-h>', '<C-w>h', { desc = 'Move to window left' })
+map('n', '<C-l>', '<C-w>l', { desc = 'Move to window right' })
+
+-- Terminal mode
+map('t', '<C-j>', '<C-\\><C-n><C-w>k', { desc = 'Move to window above' })
+map('t', '<C-k>', '<C-\\><C-n><C-w>j', { desc = 'Move to window below' })
+map('t', '<C-h>', '<C-\\><C-n><C-w>h', { desc = 'Move to window left' })
+map('t', '<C-l>', '<C-\\><C-n><C-w>l', { desc = 'Move to window right' })
+
 -- Toggle neotree
 map("n", "<C-;>", function()
   -- Get the buffer of the current window
@@ -68,4 +80,9 @@ map("n", "<leader>at", "<cmd>Augment chat-toggle<cr>", { desc = "Augment toggle 
 
 
 map("n", "gn", "``", { desc = "Jump to exact position at previous mark" })
+
+
+local dap = require("dap")
+map("n", "<leader>do", dap.step_over, { desc = "Step over" })
+map("n", "<leader>dO", dap.step_out, { desc = "Step out" })
 

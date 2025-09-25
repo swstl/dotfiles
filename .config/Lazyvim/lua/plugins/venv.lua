@@ -6,7 +6,7 @@ return {
     -- { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
   },
   lazy = true, -- Load lazily
-  branch = "regexp",
+  branch = "main",
   config = function()
     require("venv-selector").setup({
       settings = {
