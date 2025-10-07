@@ -21,6 +21,7 @@ return {
         tsserver = {},
         -- pylyzer = {},
         pyright = {},
+        gdscript = {},
         r_language_server = {
           root_dir = function(fname)
             return require("lspconfig.util").root_pattern("DESCRIPTION", "NAMESPACE", ".Rbuildignore")(fname)
