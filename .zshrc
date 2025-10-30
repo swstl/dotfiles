@@ -153,22 +153,6 @@ export START_INDEX=10
 # To customize prompt, run p10k configure or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/who/DevStuff/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/who/DevStuff/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/who/DevStuff/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/who/DevStuff/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-
 # >>> language servers >>>
 export PATH=$PATH:/usr/lib/qt6/bin
 # <<< language servers <<<
@@ -262,3 +246,15 @@ alias ns="nvims"
 # >>> spacetimeDB >>>
 export PATH="/stdb:$PATH"
 # <<< spacetimeDB <<<
+
+. "$HOME/.local/bin/env"
+
+
+# >>> npm >>>
+echo 'export PATH="$HOME/.npm-global/bin:$PATH"' >> ~/.zshrc
+# <<< npm <<<
+export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
