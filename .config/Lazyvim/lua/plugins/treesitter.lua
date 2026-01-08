@@ -26,15 +26,15 @@ return {
         "css",
         "r",
         "rnoweb",
-      })
+      });
       -- Incremental selection
-      opts.incremental_selection = {
+    opts.incremental_selection = {
         enable = true,
         keymaps = {
-          init_selection = "gnn",  -- Changed from empty string!
-          node_incremental = "gri", -- Use same key
+          init_selection = "gnn",
+          node_incremental = "gri",
           scope_incremental = "grc",
-          node_decremental = "grd", -- Changed to match your preference
+          node_decremental = "grd",
         },
       }
       -- Text objects

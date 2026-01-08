@@ -52,7 +52,7 @@ case "$1" in
         ;;
     *)
         swww-daemon
-        swww img --transition-duration 0 -t none "${wallpapers[0]}"
+        swww img --transition-duration 0 -t none "${wallpapers[0]}" --outputs eDP-1
         exit 1
         ;;
 esac

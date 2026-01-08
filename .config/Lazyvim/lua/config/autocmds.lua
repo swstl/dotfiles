@@ -16,3 +16,41 @@ vim.cmd([[
 vim.cmd([[
 highlight CopilotSuggestion guifg=#009999 ctermfg=220
 ]])
+
+
+
+
+-- for internal coder auto-sync on save
+-- Toggle variable
+_G.auto_sync_enabled = false
+
+-- Function to toggle auto-sync
+_G.toggle_auto_sync = function()
+  _G.auto_sync_enabled = not _G.auto_sync_enabled
+  if _G.auto_sync_enabled then
+    vim.notify("Auto-sync ENABLED", vim.log.levels.INFO)
+  else
+    vim.notify("Auto-sync DISABLED", vim.log.levels.INFO)
+  end
+end
+
+-- Autocommand to sync on save
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = "*.py",
+  callback = function()
+    if _G.auto_sync_enabled then
+      vim.fn.jobstart("make sync", {
+        on_exit = function(_, exit_code)
+          if exit_code == 0 then
+            vim.notify("Synced to Coder", vim.log.levels.INFO)
+          else
+            vim.notify("Sync failed!", vim.log.levels.ERROR)
+          end
+        end,
+      })
+    end
+  end,
+})
+
+-- Key mapping to toggle (adjust to your preference)
+vim.keymap.set("n", "<localleader>ts", toggle_auto_sync, { desc = "Toggle auto-sync to Coder" })

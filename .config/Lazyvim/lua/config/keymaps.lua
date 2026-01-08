@@ -3,17 +3,30 @@
 -- Add any additional keymaps here
 
 local map = vim.keymap.set
+local del = vim.keymap.del
 vim.g.maplocalleader = "\\"
 
 -- Swap 'j' and 'k' in normal and visual modes
-map({ "n", "v" }, "j", "k", { noremap = true, silent = true })
-map({ "n", "v" }, "k", "j", { noremap = true, silent = true })
+-- map({ "n", "v" }, "j", "k", { noremap = true, silent = true })
+-- map({ "n", "v" }, "k", "j", { noremap = true, silent = true })
+map({ "n", "v" }, "k", "gj", { noremap = true, silent = true })
+map({ "n", "v" }, "j", "gk", { noremap = true, silent = true })
 
 -- Normal mode
 map('n', '<C-j>', '<C-w>k', { desc = 'Move to window above' })
 map('n', '<C-k>', '<C-w>j', { desc = 'Move to window below' })
 map('n', '<C-h>', '<C-w>h', { desc = 'Move to window left' })
 map('n', '<C-l>', '<C-w>l', { desc = 'Move to window right' })
+
+-- Swap Alt+j and Alt+k for moving lines
+del("n", "<M-j>")
+del("n", "<M-k>")
+del("v", "<M-j>")
+del("v", "<M-k>")
+map("n", "<M-j>", "<Cmd>execute 'move .-' . (v:count1 + 1)<CR>==", { desc = "Move Up" })
+map("v", "<M-j>", ":<C-U>execute \"'<,'>move '<-\" . (v:count1 + 1)<CR>gv=gv", { desc = "Move Up" })
+map("n", "<M-k>", "<Cmd>execute 'move .+' . v:count1<CR>==", { desc = "Move Down" })
+map("v", "<M-k>", ":<C-U>execute \"'<,'>move '>+\" . v:count1<CR>gv=gv", { desc = "Move Down" })
 
 -- Terminal mode
 map('t', '<C-j>', '<C-\\><C-n><C-w>k', { desc = 'Move to window above' })
@@ -53,22 +66,22 @@ end, { desc = "Format with conform.nvim" })
 map("n", "_", vim.lsp.buf.format, { desc = "Format with LSP" })
 
 -- Treesitter Decremental Selection
--- map("v", "<A-i>", function()
---   -- Decrement the selection in visual mode
---   vim.api.nvim_feedkeys("grm", "v", true)
--- end, { desc = "Treesitter Decremental Selection with Alt-i in Visual Mode" })
--- -- Treesitter Incremental Selection
--- map("v", "<A-o>", function()
---   -- Increment the selection in visual mode
---   vim.api.nvim_feedkeys("grn", "v", true)
--- end, { desc = "Treesitter Incremental Selection with Alt-o in Visual Mode" })
+map("v", "<A-i>", function()
+  -- Decrement the selection in visual mode
+  vim.api.nvim_feedkeys("grm", "v", true)
+end, { desc = "Treesitter Decremental Selection with Alt-i in Visual Mode" })
+-- Treesitter Incremental Selection
+map("v", "<A-o>", function()
+  -- Increment the selection in visual mode
+  vim.api.nvim_feedkeys("grn", "v", true)
+end, { desc = "Treesitter Incremental Selection with Alt-o in Visual Mode" })
 
 
 -- iron
-vim.keymap.set("n", "<space>rs", "<cmd>IronRepl<cr>")
-vim.keymap.set("n", "<space>rr", "<cmd>IronRestart<cr>")
-vim.keymap.set("n", "<space>rF", "<cmd>IronFocus<cr>")
-vim.keymap.set("n", "<space>rh", "<cmd>IronHide<cr>")
+map("n", "<space>rs", "<cmd>IronRepl<cr>")
+map("n", "<space>rr", "<cmd>IronRestart<cr>")
+map("n", "<space>rF", "<cmd>IronFocus<cr>")
+map("n", "<space>rh", "<cmd>IronHide<cr>")
 
 
 
@@ -85,4 +98,5 @@ map("n", "gn", "``", { desc = "Jump to exact position at previous mark" })
 local dap = require("dap")
 map("n", "<leader>do", dap.step_over, { desc = "Step over" })
 map("n", "<leader>dO", dap.step_out, { desc = "Step out" })
+
 
