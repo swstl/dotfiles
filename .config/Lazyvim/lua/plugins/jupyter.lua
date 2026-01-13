@@ -11,16 +11,30 @@
 return {
   "hkupty/iron.nvim",
   config = function(plugins, opts)
-    local python_format = require("iron.fts.common").bracketed_paste_python
-    require("iron.core").setup({
-    config = {
+    local iron = require("iron.core")
+    local view = require("iron.view")
+    local common = require("iron.fts.common")
+
+    iron.setup({
+      config = {
+        -- Whether a repl should be discarded or not
+        scratch_repl = true,
+        -- Your repl definitions come here
         repl_definition = {
           python = {
             command = { 'ipython', '--no-autoindent' },
-            format = python_format,
+            format = common.bracketed_paste_python,
+            block_dividers = { "# %%", "#%%" }, -- Support for Jupyter-style cells
           },
         },
-        repl_open_cmd = require('iron.view').split.horizontal.botright(15),
+        -- Determine repl filetype based on buffer filetype
+        repl_filetype = function(bufnr, ft)
+          return ft
+        end,
+        -- Enable DAP integration (optional)
+        dap_integration = true,
+        -- How the repl window will be displayed
+        repl_open_cmd = view.split.horizontal.botright(15),
       },
       -- Iron doesn't set keymaps by default anymore.
       -- You can set them here or manually add keymaps to the functions in iron.core
