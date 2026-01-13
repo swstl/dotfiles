@@ -1,25 +1,15 @@
 return {
   "linux-cultist/venv-selector.nvim",
   dependencies = {
-    -- "mfussenegger/nvim-dap",
-    -- "mfussenegger/nvim-dap-python",
-    -- { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
+    "neovim/nvim-lspconfig",
+    { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } }, -- optional: you can also use fzf-lua, snacks, mini-pick instead.
   },
-  lazy = true, -- Load lazily
-  branch = "main",
-  config = function()
-    require("venv-selector").setup({
-      settings = {
-        search = {
-          anaconda_envs = {
-            command = "fd /bin/python$ /home/who/DevStuff/anaconda3/envs --full-path --color never -E /proc",
-            type = "anaconda",
-          },
-        },
-      },
-    })
-  end,
+  ft = "python", -- Load when opening Python files
   keys = {
-    { ",v", "<cmd>VenvSelect<cr>" }, -- Lazy load when pressing this keybinding
+    { ",v", "<cmd>VenvSelect<cr>" }, -- Open picker on keymap
+  },
+  opts = { -- this can be an empty lua table - just showing below for clarity.
+      search = {}, -- if you add your own searches, they go here.
+      options = {} -- if you add plugin options, they go here.
   },
 }

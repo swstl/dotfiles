@@ -56,6 +56,9 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza $realpath'
 
+#others:
+alias cam='ffmpeg -f v4l2 -video_size 1920x1080 -i /dev/video0 -frames:v 1 photo.jpg; viu photo.jpg'
+
 # Handy change dir shortcuts
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -96,6 +99,7 @@ alias download='aria2c --split=16 --max-connection-per-server=16 --timeout=600 -
 # alias vpn-up='sudo tailscale up --exit-node=raspberrypi --accept-routes'
 # alias vpn-down='sudo tailscale down'
 alias vpn='expressvpnctl'
+
 
 warp ()
 {
