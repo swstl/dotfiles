@@ -22,7 +22,7 @@ return {
         -- Your repl definitions come here
         repl_definition = {
           python = {
-            command = { 'ipython', '--no-autoindent' },
+            command = { "ipython", "--no-autoindent" },
             format = common.bracketed_paste_python,
             block_dividers = { "# %%", "#%%" }, -- Support for Jupyter-style cells
           },
@@ -60,20 +60,36 @@ return {
       ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
     })
 
-
     vim.api.nvim_create_autocmd("FileType", {
-        pattern = "python",
-        callback = function()
-            -- Normal mode: Run `iron.send_line()` (send current line)
-            vim.api.nvim_buf_set_keymap(0, "n", "<CR>", "<cmd>lua require('iron.core').send_line()<CR>", { noremap = true, silent = true })
+      pattern = "python",
+      callback = function()
+        -- Normal mode: Run `iron.send_line()` (send current line)
+        vim.api.nvim_buf_set_keymap(
+          0,
+          "n",
+          "<CR>",
+          "<cmd>lua require('iron.core').send_line()<CR>",
+          { noremap = true, silent = true }
+        )
 
-            -- Visual mode: Run `iron.visual_send()` (send selected block)
-            vim.api.nvim_buf_set_keymap(0, "v", "<CR>", "<cmd>lua require('iron.core').visual_send()<CR>", { noremap = true, silent = true })
-        end,
+        -- Visual mode: Run `iron.visual_send()` (send selected block)
+        vim.api.nvim_buf_set_keymap(
+          0,
+          "v",
+          "<CR>",
+          "<cmd>lua require('iron.core').visual_send()<CR>",
+          { noremap = true, silent = true }
+        )
+      end,
     })
-
-
   end,
+
+  -- {
+  --   "kiyoon/jupynium.nvim",
+  --   build = "pip3 install --user .",
+  --   -- build = "uv pip install . --python=$HOME/.virtualenvs/jupynium/bin/python",
+  --   -- build = "conda run --no-capture-output -n jupynium pip install .",
+  -- },
+  -- "rcarriga/nvim-notify", -- optional
+  -- "stevearc/dressing.nvim", -- optional, UI for :JupyniumKernelSelect
 }
-
-

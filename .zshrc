@@ -58,6 +58,7 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza $realpath'
 
 #others:
 alias cam='ffmpeg -f v4l2 -video_size 1920x1080 -i /dev/video0 -frames:v 1 photo.jpg; viu photo.jpg'
+alias camera='ffmpeg -f v4l2 -video_size 1920x1080 -i /dev/video0 -frames:v 1 photo.jpg;'
 
 # Handy change dir shortcuts
 alias ..='cd ..'
@@ -264,3 +265,4 @@ export PATH=$CUDA_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 
 export PATH="$HOME/.cargo/bin:$PATH"
+export BROWSER=/usr/bin/brave

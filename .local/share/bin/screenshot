@@ -1,40 +1,33 @@
 #!/bin/bash
 
-freeze_screen() {
-  grim - | swappy -f - &
+freeze_and_select() {
+  # wayfreeze freezes screen, runs command, then unfreezes
+  wayfreeze --hide-cursor &
+  PID=$!
   sleep 0.1
-}
 
-unfreeze_screen() {
-  pkill swappy
+  AREA=$(slurp -w 0)
+
+  if [ -n "$AREA" ]; then
+    grim -g "$AREA" - | wl-copy
+    notify-send "Screenshot copied!"
+  fi
+
+  kill $PID 2>/dev/null
 }
 
 case "$1" in
-s) # Select Area Screenshot (Frozen)
-  freeze_screen
-  grim -g "$(slurp)" - | wl-copy
-  unfreeze_screen
-  notify-send "Screenshot copied to clipboard!"
+s|sf)  # Select Area (Frozen)
+  freeze_and_select
   ;;
 
-sf) # Select Area Screenshot (Frozen)
-  freeze_screen
-  grim -g "$(slurp)" - | wl-copy
-  unfreeze_screen
-  notify-send "Screenshot copied to clipboard!"
+m)  # Active Monitor
+  grim -o "$(hyprctl activeworkspace -j | jq -r '.monitor')" - | wl-copy
+  notify-send "Screenshot copied!"
   ;;
 
-m) # Active Monitor Screenshot (Frozen)
-  freeze_screen
-  grim -o "$(hyprctl activewindow -j | jq -r '.monitor')" - | wl-copy
-  unfreeze_screen
-  notify-send "Screenshot copied to clipboard!"
-  ;;
-
-p) # All Monitors Screenshot (Frozen)
-  freeze_screen
+p)  # All Monitors
   grim - | wl-copy
-  unfreeze_screen
-  notify-send "Screenshot copied to clipboard!"
+  notify-send "Screenshot copied!"
   ;;
 esac

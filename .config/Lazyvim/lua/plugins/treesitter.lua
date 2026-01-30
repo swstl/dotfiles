@@ -26,6 +26,7 @@ return {
         "css",
         "r",
         "rnoweb",
+        "kotlin"
       });
       -- Incremental selection
     opts.incremental_selection = {
