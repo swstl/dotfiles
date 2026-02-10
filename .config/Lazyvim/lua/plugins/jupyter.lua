@@ -7,10 +7,11 @@
 --     end
 --   }
 -- }
---
+
 return {
-  "hkupty/iron.nvim",
-  config = function(plugins, opts)
+  {
+    "hkupty/iron.nvim",
+    config = function(plugins, opts)
     local iron = require("iron.core")
     local view = require("iron.view")
     local common = require("iron.fts.common")
@@ -83,13 +84,14 @@ return {
       end,
     })
   end,
+  },
 
-  -- {
-  --   "kiyoon/jupynium.nvim",
-  --   build = "pip3 install --user .",
-  --   -- build = "uv pip install . --python=$HOME/.virtualenvs/jupynium/bin/python",
-  --   -- build = "conda run --no-capture-output -n jupynium pip install .",
-  -- },
+  {
+    "kiyoon/jupynium.nvim",
+    -- build = "pip3 install --user .",
+    build = "uv pip install . --python=$HOME/.virtualenvs/jupynium/bin/python",
+    -- build = "conda run --no-capture-output -n jupynium pip install .",
+  },
   -- "rcarriga/nvim-notify", -- optional
-  -- "stevearc/dressing.nvim", -- optional, UI for :JupyniumKernelSelect
+  "stevearc/dressing.nvim", -- optional, UI for :JupyniumKernelSelect
 }
