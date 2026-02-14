@@ -219,7 +219,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 
 # >>> emscripten (webassembly:) >>> 
 # >>> files are not added in dotfiles, remove if not needed
-source /etc/profile.d/emscripten.sh
+[[ -f /etc/profile.d/emscripten.sh ]] && source /etc/profile.d/emscripten.sh
 # <<< emscripten (webassembly:) <<<
 
 # >>> nvim configurations >>>
@@ -253,7 +253,7 @@ alias ns="nvims"
 export PATH="/stdb:$PATH"
 # <<< spacetimeDB <<<
 
-. "$HOME/.local/bin/env"
+[[ -f ~/.local/bin/env ]] && . ~/.local/bin/env 
 
 
 # >>> npm >>>
