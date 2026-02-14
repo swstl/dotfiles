@@ -27,6 +27,7 @@ return {
           documentation = cmp.config.window.bordered(),
         },
         sources = cmp.config.sources({
+          { name = "jupynium", priority = 1000 },
           { name = "nvim_lsp" },
           -- { name = "vsnip" }, -- For vsnip users.
           { name = "luasnip" }, -- For luasnip users.
