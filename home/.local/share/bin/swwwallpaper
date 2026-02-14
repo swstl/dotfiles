@@ -3,7 +3,7 @@
 INDEX_FILE="$HOME/.config/wp_in"
 
 DEFAULT_DIR="$HOME/.dotfiles/Backgrounds"
-WALLPAPER_DIR=$(getchange "$DEFAULT_DIR")
+WALLPAPER_DIR=$DEFAULT_DIR
 
 if [ ! -d "$WALLPAPER_DIR" ]; then
     echo "Error: Wallpaper directory '$WALLPAPER_DIR' does not exist."
@@ -51,9 +51,10 @@ case "$1" in
         ((CURRENT_INDEX < 0)) && CURRENT_INDEX=$((total_wallpapers - 1))
         ;;
     *)
-        swww-daemon
-        swww img --transition-duration 0 -t none "${wallpapers[0]}" --outputs eDP-1
-        exit 1
+        swww-daemon &
+        sleep 0.5
+        swww img --transition-duration 0 -t none "${wallpapers[0]}"
+        exit 0
         ;;
 esac
 

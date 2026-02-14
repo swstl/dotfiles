@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONFIG_FILE="$HOME/.config/.sus"
-FALLBACK_PATH=Ly55dXAvdGVzdDIvd2hhdC9oZXJlL3RoZXJlLy5zdXM=
+FALLBACK_PATH="$HOME/.dotfiles/Backgrounds/"
 
 if [ -z "$1" ]; then
     echo "Usage: $0 path"
@@ -20,6 +20,6 @@ VALUE=$(cat "$CONFIG_FILE")
 if [ "$VALUE" = "0" ]; then
     echo "$PATH_IF_0"
 else
-    echo "$FALLBACK_PATH" | base64 -d
+    echo "$FALLBACK_PATH"
 fi
 

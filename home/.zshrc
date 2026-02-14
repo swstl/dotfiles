@@ -267,3 +267,4 @@ export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 
 export PATH="$HOME/.cargo/bin:$PATH"
 export BROWSER=/usr/bin/brave
+export PATH="$HOME/.local/bin:$PATH"

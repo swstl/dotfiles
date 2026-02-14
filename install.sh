@@ -23,7 +23,9 @@ backup_item() {
     local backup_path="$BACKUP_DIR$dest"
 
     run mkdir -p "$(dirname "$backup_path")"
-    run mv "$dest" "$backup_path"
+    run rm -rf "$backup_path"
+    run cp -a "$dest" "$backup_path"
+    run rm -rf "$dest"
     echo "  backup: $dest -> $backup_path"
     DID_BACKUP=true
 }
@@ -123,6 +125,17 @@ elif [ "$SHELL" != "$ZSH_PATH" ]; then
     fi
 else
     echo "Default shell is already zsh."
+fi
+
+echo "Installing deps..."
+if [ -f "$DOTFILES/deps" ]; then
+    mapfile -t packages < "$DOTFILES/deps"
+    if [ ${#packages[@]} -gt 0 ]; then
+        echo "  packages: ${packages[*]}"
+        sudo pacman -S --needed --noconfirm "${packages[@]}"
+    fi
+else
+    echo "  no deps file found, skipping."
 fi
 
 echo "Done."
