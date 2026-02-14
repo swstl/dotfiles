@@ -114,7 +114,7 @@ alias ld='lazydocker'
 alias cr='mpv --yt-dlp-raw-options=cookies-from-browser=brave'
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT1'
 alias y='yazi'
-alias c='c'
+alias c='clear'
 lsfind ()
 {
     ll "$1" | grep "$2"
@@ -148,6 +148,7 @@ function up() {
 
 
 # Shell Intergrations
+export PATH="$HOME/.local/share/bin:$PATH"
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 
