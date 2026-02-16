@@ -112,6 +112,12 @@ if $DID_BACKUP; then
     echo -e "\033[33mOld configs backed up in $BACKUP_DIR\033[0m"
 fi
 
+# Allow sddm to traverse home dir so it can read theme files symlinked from dotfiles
+if id sddm &>/dev/null; then
+    echo "Granting sddm traverse access to $HOME..."
+    sudo setfacl -m u:sddm:x "$HOME"
+fi
+
 
 echo "Setting default shell to zsh..."
 ZSH_PATH="$(command -v zsh)"

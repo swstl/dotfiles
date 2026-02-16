@@ -53,7 +53,7 @@ case "$1" in
     *)
         swww-daemon &
         sleep 0.5
-        swww img --transition-duration 0 -t none "${wallpapers[0]}"
+        swww img --transition-duration 0 -t none "${wallpapers[$CURRENT_INDEX]}"
         exit 0
         ;;
 esac
