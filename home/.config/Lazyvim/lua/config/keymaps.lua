@@ -79,7 +79,10 @@ end, { desc = "Treesitter Incremental Selection with Alt-o in Visual Mode" })
 
 -- iron
 map("n", "<space>rs", "<cmd>IronRepl<cr>")
-map("n", "<space>rr", "<cmd>IronRestart<cr>")
+map("n", "<space>rr", function()
+  local ok = pcall(vim.cmd, "IronRestart")
+  if not ok then vim.cmd("IronRepl") end
+end, { desc = "Restart REPL or start if not running" })
 map("n", "<space>rF", "<cmd>IronFocus<cr>")
 map("n", "<space>rh", "<cmd>IronHide<cr>")
 
