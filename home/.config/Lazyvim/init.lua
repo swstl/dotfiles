@@ -26,4 +26,5 @@ end
 
 -- in godot add the nvim path in editor settings > text editor > external > exec path: `NVIM_APPNAME=Lazyvim /usr/bin/nvim` or whatever
 -- in godot add this line in editor settings > text editor > external > exec flags: --server {project}/server.pipe --remote-send "<C-\><C-N>:e {file}<CR>:call cursor({line}+1,{col})<CR>"
+-- if godot is ran from steam, it wont be able to find nvim, so i had to download the appimage, then extract the squashfs-root and copy it to a folder steam could read such as ~/.local/share/here and run with .local/share/nvim-extracted/usr/bin/nvim
 
