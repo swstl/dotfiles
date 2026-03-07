@@ -119,7 +119,16 @@ return {
     opts = {
       python_host = vim.fn.expand "~/.virtualenvs/jupynium/bin/python",
       jupyter_command = vim.fn.expand "~/.virtualenvs/jupynium/bin/jupyter",
+      syntax_highlight = {
+        enable = false,
+      },
     },
+    config = function(_, opts)
+      require("jupynium").setup(opts)
+      -- highlighter always registers its autocmd regardless of syntax_highlight.enable,
+      -- so delete the augroup to prevent it firing on every CursorMoved/WinScrolled
+      pcall(vim.api.nvim_del_augroup_by_name, "jupynium-highlighter")
+    end,
   },
   -- "rcarriga/nvim-notify", -- optional
   "stevearc/dressing.nvim", -- optional, UI for :JupyniumKernelSelect

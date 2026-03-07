@@ -54,3 +54,79 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
 -- Key mapping to toggle (adjust to your preference)
 vim.keymap.set("n", "<localleader>ts", toggle_auto_sync, { desc = "Toggle auto-sync to Coder" })
+
+
+
+
+
+
+-- Auto-setup uv + Jupyter kernel when opening .ju.py files
+local _jupy_setup_dirs = {}
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.ju.py",
+  callback = function(args)
+    local dir = vim.fn.fnamemodify(args.file, ":h")
+    if _jupy_setup_dirs[dir] then return end
+    _jupy_setup_dirs[dir] = true
+
+    if vim.fn.isdirectory(dir .. "/.venv") == 1 then return end
+
+    local project_name = vim.fn.fnamemodify(dir, ":t")
+
+    local function install_kernel()
+      vim.fn.jobstart(
+        { "uv", "run", "python", "-m", "ipykernel", "install", "--user", "--name", project_name },
+        {
+          cwd = dir,
+          on_exit = function(_, code)
+            vim.schedule(function()
+              if code == 0 then
+                vim.notify("Jupyter kernel '" .. project_name .. "' ready", vim.log.levels.INFO)
+              else
+                vim.notify("ipykernel install failed", vim.log.levels.ERROR)
+              end
+            end)
+          end,
+        }
+      )
+    end
+
+    local function add_packages()
+      vim.notify("uv: adding ipython jupyter ipykernel...", vim.log.levels.INFO)
+      vim.fn.jobstart({ "uv", "add", "ipython", "jupyter", "ipykernel" }, {
+        cwd = dir,
+        on_exit = function(_, code)
+          vim.schedule(function()
+            if code == 0 then
+              install_kernel()
+            else
+              vim.notify("uv add failed", vim.log.levels.ERROR)
+            end
+          end)
+        end,
+      })
+    end
+
+    if vim.fn.filereadable(dir .. "/pyproject.toml") == 1 then
+      add_packages()
+    else
+      vim.notify("uv: initializing project in " .. dir, vim.log.levels.INFO)
+      vim.fn.jobstart({ "uv", "init" }, {
+        cwd = dir,
+        on_exit = function(_, code)
+          vim.schedule(function()
+            if code == 0 then
+              add_packages()
+            else
+              vim.notify("uv init failed", vim.log.levels.ERROR)
+            end
+          end)
+        end,
+      })
+    end
+  end,
+})
+
+
+vim.cmd("colorscheme kanagawa")

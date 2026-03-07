@@ -9,3 +9,6 @@ vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 
 vim.g.autoformat = false
+
+-- disable matchparen (causes scroll lag via searchpairpos on large files)
+vim.g.loaded_matchparen = 1
