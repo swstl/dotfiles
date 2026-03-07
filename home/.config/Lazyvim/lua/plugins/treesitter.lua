@@ -51,6 +51,12 @@ return {
           },
         },
       }
+
+    opts.indent = {
+      enable = true,
+      disable = { "gdscript" },
+    }
     end,
   },
+    "habamax/vim-godot",
 }
