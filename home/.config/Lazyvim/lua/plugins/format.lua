@@ -54,6 +54,7 @@ return {
         python = { "black" },
         c = { "clang-format" },
         cpp = { "clang-format" },
+        json = { "jq" },
       },
       formatters = {
         injected = { options = { ignore_errors = true } },

@@ -53,7 +53,8 @@ return {
         "flake8",
         "black",
         "eslint_d",
-        "kotlin-lsp"
+        "kotlin-lsp",
+        "jq",
       },
     },
   },
