@@ -51,14 +51,14 @@ case "$1" in
         ((CURRENT_INDEX < 0)) && CURRENT_INDEX=$((total_wallpapers - 1))
         ;;
     *)
-        swww-daemon &
+        awww-daemon &
         sleep 0.5
-        swww img --transition-duration 0 -t none "${wallpapers[$CURRENT_INDEX]}"
+        awww img --transition-duration 0 -t none "${wallpapers[$CURRENT_INDEX]}"
         exit 0
         ;;
 esac
 
 echo "$CURRENT_INDEX" > "$INDEX_FILE"
 
-swww img --transition-duration 0 -t none "${wallpapers[$CURRENT_INDEX]}"
+awww img --transition-duration 0 -t none "${wallpapers[$CURRENT_INDEX]}"
 
