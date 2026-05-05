@@ -9,7 +9,7 @@ freeze_and_select() {
   AREA=$(slurp -w 0)
 
   if [ -n "$AREA" ]; then
-    grim -g "$AREA" - | wl-copy
+    grim -g "$AREA" - | wl-copy --type image/png
     notify-send "Screenshot copied!"
   fi
 
@@ -22,12 +22,12 @@ s|sf)  # Select Area (Frozen)
   ;;
 
 m)  # Active Monitor
-  grim -o "$(hyprctl activeworkspace -j | jq -r '.monitor')" - | wl-copy
+  grim -o "$(hyprctl activeworkspace -j | jq -r '.monitor')" - | wl-copy --type image/png
   notify-send "Screenshot copied!"
   ;;
 
 p)  # All Monitors
-  grim - | wl-copy
+  grim - | wl-copy --type image/png
   notify-send "Screenshot copied!"
   ;;
 esac
