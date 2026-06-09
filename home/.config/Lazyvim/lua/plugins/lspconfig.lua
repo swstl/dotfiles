@@ -1,13 +1,13 @@
 return {
-  -- add tsserver and setup with typescript.nvim instead of lspconfig
+  -- add tsserver and setup with typescript-tools.nvim instead of lspconfig
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "jose-elias-alvarez/typescript.nvim",
+      { "pmizio/typescript-tools.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
     },
     keys = {
-      { "<leader>co", "<cmd>TypescriptOrganizeImports<cr>", desc = "Organize Imports" },
-      { "<leader>cR", "<cmd>TypescriptRenameFile<cr>", desc = "Rename File" },
+      { "<leader>co", "<cmd>TSToolsOrganizeImports<cr>", desc = "Organize Imports" },
+      { "<leader>cR", "<cmd>TSToolsRenameFile<cr>", desc = "Rename File" },
     },
     ---@class PluginLspOpts
     opts = {
@@ -32,9 +32,9 @@ return {
       -- return true if you don't want this server to be setup with lspconfig
       ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       setup = {
-        -- example to setup with typescript.nvim
-        tsserver = function(_, opts)
-          require("typescript").setup({ server = opts })
+        -- example to setup with typescript-tools.nvim
+        tsserver = function(_, _)
+          require("typescript-tools").setup({})
           return true
         end,
         -- Specify * to use this function as a fallback for any server

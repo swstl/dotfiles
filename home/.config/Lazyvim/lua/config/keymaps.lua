@@ -36,18 +36,15 @@ map('t', '<C-l>', '<C-\\><C-n><C-w>l', { desc = 'Move to window right' })
 
 -- Toggle neotree
 map("n", "<C-;>", function()
-  -- Get the buffer of the current window
-  local current_buf = vim.api.nvim_get_current_buf()
-
-  -- Check if the current buffer is a Neo-tree buffer
-  if vim.fn.bufname(current_buf):match("neo%-tree") then
+  -- Check the filetype of the current window (reliable across neo-tree versions)
+  if vim.bo.filetype == "neo-tree" then
     -- Close Neo-tree if the focus is on it
     vim.cmd("Neotree close")
   else
     -- Focus Neo-tree if the focus is not on it
     vim.cmd("Neotree focus")
   end
-end, {})
+end, { desc = "Toggle/focus Neo-tree" })
 
 -- yank to clipboard
 map({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
