@@ -270,3 +270,4 @@ export BROWSER=/usr/bin/brave
 export PATH="$HOME/.local/bin:$PATH"
 
 alias freemocap='cd ~/mocap/freemocap && uv run python -m freemocap'
+alias godot-addons='/home/swstl/.config/godot/link-common-addons.sh'
