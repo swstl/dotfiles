@@ -63,6 +63,7 @@ alias camera='ffmpeg -f v4l2 -video_size 1920x1080 -i /dev/video0 -frames:v 1 ph
 # Handy change dir shortcuts
 alias ..='cd ..'
 alias ...='cd ../..'
+alias .2='cd ../..'
 alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../..'
@@ -271,3 +272,37 @@ export PATH="$HOME/.local/bin:$PATH"
 
 alias freemocap='cd ~/mocap/freemocap && uv run python -m freemocap'
 alias godot-addons='/home/swstl/.config/godot/link-common-addons.sh'
+
+# >>> rclone <-> godot assets (minio:game-assets bucket) >>>
+# Pull assets down. No arg = everything; arg = just that subfolder.
+#   assets-pull            -> whole bucket
+#   assets-pull characters -> only game-assets/characters
+assets-pull() {
+  local sub="${1:-}"
+  rclone copy "minio:game-assets/$sub" "$PWD/assets/$sub" -P
+}
+
+# Push clean assets up. Never deletes on the server (copy, not sync),
+# and skips Godot cruft so the bucket stays pure raw assets.
+#   assets-push            -> push everything
+#   assets-push characters -> push only that subfolder
+assets-push() {
+  local sub="${1:-}"
+  rclone copy "$PWD/assets/$sub" "minio:game-assets/$sub" -P \
+    --exclude '*.import' --exclude '.godot/**'
+}
+
+# List bucket contents. Defaults to ls-style (immediate contents only).
+#   assets-list                -> top-level files/folders (like ls)
+#   assets-list combined       -> contents of that subfolder (like ls)
+#   assets-list combined 2     -> tree view of that subfolder, 2 levels deep
+#   assets-list "" 3           -> tree of whole bucket, 3 levels deep
+assets-list() {
+  local sub="${1:-}" depth="${2:-}"
+  if [[ -n "$depth" ]]; then
+    rclone tree --level "$depth" "minio:game-assets/$sub"
+  else
+    rclone lsf "minio:game-assets/$sub"
+  fi
+}
+# <<< rclone <-> godot assets <<<
