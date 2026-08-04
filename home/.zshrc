@@ -288,21 +288,55 @@ assets-pull() {
 #   assets-push characters -> push only that subfolder
 assets-push() {
   local sub="${1:-}"
+  # This MinIO endpoint 403s on every HEAD request, so:
+  #   --s3-no-head          : skip the post-upload verify HEAD (PUT still checks integrity)
+  #   --multi-thread-cutoff : 1T = never use multi-thread uploads (their path does its own HEAD)
+  #   --size-only           : compare by file size from the listing, not mtime metadata
+  #                           (avoids per-file HEAD -> no 403 spam, and re-runs skip existing files)
   rclone copy "$PWD/assets/$sub" "minio:game-assets/$sub" -P \
+    --s3-no-head --multi-thread-cutoff 1T --size-only \
     --exclude '*.import' --exclude '.godot/**'
 }
 
-# List bucket contents. Defaults to ls-style (immediate contents only).
+# List or search the bucket.
+# LISTING (no * or ? in first arg):
 #   assets-list                -> top-level files/folders (like ls)
 #   assets-list combined       -> contents of that subfolder (like ls)
 #   assets-list combined 2     -> tree view of that subfolder, 2 levels deep
 #   assets-list "" 3           -> tree of whole bucket, 3 levels deep
+# SEARCH (first arg contains * or ?), case-insensitive, recursive:
+#   assets-list '*.zip'              -> every .zip in the bucket
+#   assets-list '*chicken*'          -> any file with "chicken" in the name
+#   assets-list '*.glb' combined     -> .glb files only under combined/
 assets-list() {
-  local sub="${1:-}" depth="${2:-}"
-  if [[ -n "$depth" ]]; then
-    rclone tree --level "$depth" "minio:game-assets/$sub"
-  else
-    rclone lsf "minio:game-assets/$sub"
+  local a="${1:-}" b="${2:-}"
+  if [[ "$a" == *'*'* || "$a" == *'?'* ]]; then          # search mode
+    rclone lsf -R --files-only --ignore-case --include "$a" "minio:game-assets/$b"
+  elif [[ -n "$b" ]]; then                                # tree, depth-limited
+    rclone tree --level "$b" "minio:game-assets/$a"
+  else                                                    # ls-style listing
+    rclone lsf "minio:game-assets/$a"
   fi
+}
+
+# Mount the whole bucket as a read-only folder at ./game-assets.
+# Files download lazily (only what you actually open) and are cached,
+# so you can browse/view in f3d, image viewers, etc. without pulling
+# everything. Optional arg = a different mountpoint.
+#   assets-mount             -> mount at $PWD/game-assets
+#   assets-mount ~/foo       -> mount there instead
+assets-mount() {
+  local mnt="${1:-$PWD/game-assets}"
+  mkdir -p "$mnt"
+  rclone mount minio:game-assets "$mnt" \
+    --vfs-cache-mode full --read-only --daemon
+  echo "mounted minio:game-assets at $mnt"
+}
+
+# Unmount it again. Same optional arg as assets-mount.
+# Run from the same dir you mounted in (or pass the path explicitly).
+assets-unmount() {
+  local mnt="${1:-$PWD/game-assets}"
+  fusermount -u "$mnt" && echo "unmounted $mnt" && rmdir "$mnt" 2>/dev/null
 }
 # <<< rclone <-> godot assets <<<
