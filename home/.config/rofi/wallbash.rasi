@@ -29,7 +29,7 @@ window {
     cursor:                      "default";
     spacing:                     0em;
     padding:                     0em;
-    border:                      2px solid @border-color;
+    border:                      2px;
     border-radius:               0px;  // Sharp edges
     border-color:                @main-br;
     background-color:            @main-bg;
@@ -73,7 +73,8 @@ element {
     cursor:                      pointer;
     background-color:            @main-bg;
     text-color:                  @main-fg;
-    border:                      1px solid @border-color;  // Added border for each element
+    border:                      1px;
+    border-color:                @border-color;  // Added border for each element
     border-radius:               0px;  // Sharp edges
 }
 element selected.normal {

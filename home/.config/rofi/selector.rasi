@@ -2,8 +2,9 @@
 configuration {
     modi:                        "drun";
     show-icons:                  true;
+    icon-theme:                  "Papirus-Dark";
     drun-display-format:         "{name}";
-    font:                        "JetBrainsMono Nerd Font 10";
+    font:                        "JetBrainsMono Nerd Font 11";
 }
 
 @theme "~/.config/rofi/theme.rasi"
@@ -12,92 +13,125 @@ configuration {
 window {
     enabled:                     true;
     fullscreen:                  false;
+    width:                       40em;
+    height:                      40em;
     transparency:                "real";
     cursor:                      "default";
     spacing:                     0em;
     padding:                     0em;
-    border:                      2px solid @border-color;
-    border-radius:               0px;  // Sharp edges
-    border-color:                @main-br;
-    background-color:            @main-bg;
-    shadow:                      true;
-    shadow-color:                rgba(0, 0, 0, 0.5);
+    border:                      0px;
+    border-radius:               0px;
+    background-color:            transparent;
+    shadow:                      false;
 }
 mainbox {
     enabled:                     true;
-    orientation:                 horizontal;
-    children:                    [ "dummy", "frame", "dummy" ];
+    orientation:                 vertical;
+    spacing:                     0em;
+    padding:                     0em;
+    children:                    [ "spacer-top", "content-row", "spacer-bottom" ];
     background-color:            transparent;
 }
-frame {
-    children:                    [ "listview" ];
+spacer-top {
+    expand:                      true;
     background-color:            transparent;
+}
+spacer-bottom {
+    expand:                      true;
+    background-color:            transparent;
+}
+content-row {
+    expand:                      false;
+    orientation:                 horizontal;
+    children:                    [ "spacer-left", "content", "spacer-right" ];
+    background-color:            transparent;
+}
+spacer-left {
+    expand:                      true;
+    background-color:            transparent;
+}
+spacer-right {
+    expand:                      false;
+    width:                       190px;
+    background-color:            transparent;
+}
+content {
+    expand:                      false;
+    width:                       380px;
+    orientation:                 vertical;
+    spacing:                     0.6em;
+    children:                    [ "inputbar", "listview" ];
+    background-color:            transparent;
+}
+
+// Input //
+inputbar {
+    enabled:                     true;
+    children:                    [ "prompt", "entry" ];
+    spacing:                     0.6em;
+    padding:                     0.7em 1em;
+    border-radius:               12px;
+    background-color:            transparent;
+    text-color:                  @main-fg;
+}
+prompt {
+    enabled:                     true;
+    background-color:            transparent;
+    text-color:                  @main-ex;
+}
+entry {
+    enabled:                     true;
+    placeholder:                 "Search apps...";
+    placeholder-color:           rgba(205, 214, 244, 0.45);
+    background-color:            transparent;
+    text-color:                  @main-fg;
+    cursor:                      text;
 }
 
 // Lists //
 listview {
     enabled:                     true;
-    spacing:                     4em;
-    padding:                     4em;
-    columns:                     10;
-    lines:                       1;
-    dynamic:                     false;
-    fixed-height:                false;
-    fixed-columns:               true;
-    reverse:                     true;
+    columns:                     1;
+    lines:                       7;
+    spacing:                     0.3em;
     cursor:                      "default";
+    dynamic:                     true;
+    scrollbar:                   false;
+    fixed-height:                true;
+    padding:                     0.6em;
+    border-radius:               12px;
     background-color:            transparent;
     text-color:                  @main-fg;
-}
-dummy {
-    width:                       2em;
-    expand:                      false;
-    background-color:            transparent;
 }
 
 // Elements //
 element {
     enabled:                     true;
-    spacing:                     0em;
-    padding:                     0.5em;  // Added padding for better spacing
+    orientation:                 horizontal;
+    spacing:                     0.8em;
+    padding:                     0.5em 0.7em;
     cursor:                      pointer;
     background-color:            transparent;
     text-color:                  @main-fg;
-    border:                      1px solid @border-color;  // Added border for each element
-    border-radius:               0px;  // Sharp edges
+    border-radius:               10px;
+}
+element normal.urgent, element alternate.urgent {
+    text-color:                  @main-ex;
 }
 element selected.normal {
     background-color:            @select-bg;
     text-color:                  @select-fg;
 }
 element-icon {
+    size:                        1.8em;
     cursor:                      inherit;
-    size:                        10em;
-    padding:                     0.5em;  // Added padding for icons
     background-color:            transparent;
     text-color:                  inherit;
-    expand:                      false;
 }
 element-text {
     vertical-align:              0.5;
-    horizontal-align:            0.5;
+    horizontal-align:            0.0;
     cursor:                      inherit;
     background-color:            transparent;
     text-color:                  inherit;
 }
-
-// New Feature: Footer //
-footer {
-    enabled:                     true;
-    padding:                     1em;
-    background-color:            @main-bg;
-    text-color:                  @main-fg;
-    text:                        "Press Enter to select, Esc to exit";
-    font:                        "JetBrainsMono Nerd Font 8";
-    horizontal-align:            0.5;
-    vertical-align:              0.5;
-}
-mainbox {
-    children:                    [ "dummy" , "frame" , "dummy" , "footer" ];
-}
-

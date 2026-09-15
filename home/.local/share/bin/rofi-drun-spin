@@ -1,0 +1,22 @@
+#!/bin/bash
+# Launches rofi's drun launcher with the rotating Zoltraak circle spinning
+# behind it. Pressing the bind again while open closes it (toggle behavior).
+
+log=/tmp/rofi-drun-spin.log
+echo "=== $(date '+%H:%M:%S.%N') pid=$$ invoked, PATH=$PATH WAYLAND_DISPLAY=$WAYLAND_DISPLAY XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR HOME=$HOME ===" >> "$log"
+
+if pkill -x rofi; then
+    echo "$(date '+%H:%M:%S.%N') pkill found and killed an existing rofi -> exiting (toggle close)" >> "$log"
+    exit 0
+fi
+echo "$(date '+%H:%M:%S.%N') no existing rofi -> launching" >> "$log"
+
+~/.local/share/bin/rofi-circle-spin >> "$log" 2>&1 &
+spin_pid=$!
+echo "$(date '+%H:%M:%S.%N') spinner launched, pid=$spin_pid" >> "$log"
+
+rofi -config ~/.config/rofi/config.rasi -show drun >> "$log" 2>&1
+echo "$(date '+%H:%M:%S.%N') rofi exited" >> "$log"
+
+kill "$spin_pid" 2>/dev/null
+echo "$(date '+%H:%M:%S.%N') killed spinner pid=$spin_pid" >> "$log"

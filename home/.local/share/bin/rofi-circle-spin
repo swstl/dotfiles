@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+"""Spins the Zoltraak magic-circle image behind rofi as a layer-shell overlay.
+Rofi itself has no background-image; this process draws the rotating circle
+on a transparent, click-through surface sitting just below rofi's layer,
+matched in size/position. Runs until killed (SIGTERM/SIGINT)."""
+
+import math
+import signal
+import sys
+
+import cairo
+import gi
+
+gi.require_version("Gtk", "3.0")
+gi.require_version("GtkLayerShell", "0.1")
+from gi.repository import Gtk, GtkLayerShell, GLib, Gdk
+
+IMAGE_PATH = "/home/swstl/.config/rofi/assets/zoltraak-circle.png"
+GLOW_IMAGE_PATH = "/home/swstl/.config/rofi/assets/zoltraak-circle-glow.png"
+CIRCLE_SIZE = 800     # visual circle diameter, must match rofi window width/height in px
+WINDOW_SIZE = 1100    # canvas size, bigger than CIRCLE_SIZE so the glow has room to fade out
+SECONDS_PER_ROTATION = 14.0
+FRAME_INTERVAL_MS = 16
+GLOW_SCALE = 1.06     # glow drawn slightly larger than the sharp circle
+GLOW_OPACITY = 0.35   # keep this low for a subtle glow, not a bloom
+BACKDROP_DIAMETER = 640
+BACKDROP_OPACITY = 0.8
+BACKDROP_COLOR = (17 / 255, 17 / 255, 27 / 255)
+
+surface = cairo.ImageSurface.create_from_png(IMAGE_PATH)
+img_w, img_h = surface.get_width(), surface.get_height()
+
+glow_surface = cairo.ImageSurface.create_from_png(GLOW_IMAGE_PATH)
+glow_w, glow_h = glow_surface.get_width(), glow_surface.get_height()
+
+start_time = GLib.get_monotonic_time()
+
+
+def on_draw(widget, cr):
+    elapsed = (GLib.get_monotonic_time() - start_time) / 1_000_000.0
+    angle = (elapsed / SECONDS_PER_ROTATION) * 2 * math.pi
+
+    cr.save()
+    cr.translate(WINDOW_SIZE / 2, WINDOW_SIZE / 2)
+    cr.rotate(angle)
+
+    cr.save()
+    glow_scale = (CIRCLE_SIZE / glow_w) * GLOW_SCALE
+    cr.scale(glow_scale, glow_scale)
+    cr.translate(-glow_w / 2, -glow_h / 2)
+    cr.set_source_surface(glow_surface, 0, 0)
+    cr.paint_with_alpha(GLOW_OPACITY)
+    cr.restore()
+
+    scale = CIRCLE_SIZE / img_w
+    cr.scale(scale, scale)
+    cr.translate(-img_w / 2, -img_h / 2)
+    cr.set_source_surface(surface, 0, 0)
+    cr.paint()
+    cr.restore()
+
+    # Dark circular tint on top of the circle, centered, smaller than the full canvas.
+    cr.arc(WINDOW_SIZE / 2, WINDOW_SIZE / 2, BACKDROP_DIAMETER / 2, 0, 2 * math.pi)
+    cr.set_source_rgba(*BACKDROP_COLOR, BACKDROP_OPACITY)
+    cr.fill()
+    return False
+
+
+def on_tick():
+    drawing_area.queue_draw()
+    return True
+
+
+win = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
+win.set_default_size(WINDOW_SIZE, WINDOW_SIZE)
+win.set_app_paintable(True)
+
+screen = win.get_screen()
+visual = screen.get_rgba_visual()
+if visual and screen.is_composited():
+    win.set_visual(visual)
+
+GtkLayerShell.init_for_window(win)
+GtkLayerShell.set_layer(win, GtkLayerShell.Layer.TOP)
+GtkLayerShell.set_namespace(win, "rofi-circle-spin")
+GtkLayerShell.set_keyboard_mode(win, GtkLayerShell.KeyboardMode.NONE)
+
+drawing_area = Gtk.DrawingArea()
+drawing_area.set_size_request(WINDOW_SIZE, WINDOW_SIZE)
+drawing_area.connect("draw", on_draw)
+win.add(drawing_area)
+
+win.connect("destroy", Gtk.main_quit)
+win.show_all()
+
+# Make the whole surface click-through so it never steals input from rofi.
+gdk_window = win.get_window()
+if gdk_window is not None:
+    empty_region = cairo.Region()
+    gdk_window.input_shape_combine_region(empty_region, 0, 0)
+
+GLib.timeout_add(FRAME_INTERVAL_MS, on_tick)
+
+for sig in (signal.SIGTERM, signal.SIGINT):
+    GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, sig, lambda *_: (Gtk.main_quit(), False)[1])
+
+Gtk.main()

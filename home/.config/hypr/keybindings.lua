@@ -44,8 +44,8 @@ hl.bind(mainMod .. " + SHIFT + CTRL + F", hl.dsp.exec_cmd("torbrowser-launcher")
 hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd("sysmonlaunch")) -- launch system monitor (htop/btop or fallback to top)
 
 -- Rofi menus
-hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("pkill -x rofi || rofilaunch d || rofi -show drun")) -- launch application launcher
-hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("pkill -x rofi || rofilaunch w || rofi -show drun")) -- launch window switcher
+hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("rofi-drun-spin")) -- launch application launcher
+hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("rofi-drun-spin")) -- launch application launcher
 hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd("pkill -x rofi || rofilaunch f")) -- launch file explorer
 
 -- Audio control

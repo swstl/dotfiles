@@ -133,6 +133,17 @@ else
     echo "Default shell is already zsh."
 fi
 
+echo "Setting up locale..."
+if [ -f /etc/locale.gen ] && grep -q "^#en_US.UTF-8 UTF-8" /etc/locale.gen; then
+    sudo sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+    sudo locale-gen
+elif [ -f /etc/locale.gen ] && ! grep -q "^en_US.UTF-8 UTF-8" /etc/locale.gen; then
+    echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen >/dev/null
+    sudo locale-gen
+else
+    echo "  en_US.UTF-8 already generated."
+fi
+
 echo "Installing deps..."
 if [ -f "$DOTFILES/deps" ]; then
     mapfile -t packages < "$DOTFILES/deps"
