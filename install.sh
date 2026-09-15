@@ -8,6 +8,13 @@ BACKUP_DIR="$HOME/old_config"
 USE_SUDO=""
 DID_BACKUP=false
 
+# Several configs/scripts (hyprlock.conf, swwwallpaper, getchange) hardcode
+# ~/.dotfiles as the repo location, so keep that path pointing here regardless
+# of where the repo was actually cloned.
+if [ "$DOTFILES" != "$HOME/.dotfiles" ]; then
+    ln -sfn "$DOTFILES" "$HOME/.dotfiles"
+fi
+
 run() {
     if ! "$@" 2>/dev/null; then
         if [ -z "$USE_SUDO" ]; then
@@ -112,13 +119,6 @@ if $DID_BACKUP; then
     echo -e "\033[33mOld configs backed up in $BACKUP_DIR\033[0m"
 fi
 
-# Allow sddm to traverse home dir so it can read theme files symlinked from dotfiles
-if id sddm &>/dev/null; then
-    echo "Granting sddm traverse access to $HOME..."
-    sudo setfacl -m u:sddm:x "$HOME"
-fi
-
-
 echo "Setting default shell to zsh..."
 ZSH_PATH="$(command -v zsh)"
 if [ -z "$ZSH_PATH" ]; then
@@ -142,6 +142,26 @@ if [ -f "$DOTFILES/deps" ]; then
     fi
 else
     echo "  no deps file found, skipping."
+fi
+
+# Allow sddm to traverse home dir so it can read theme files symlinked from dotfiles
+if id sddm &>/dev/null; then
+    echo "Granting sddm traverse access to $HOME..."
+    sudo setfacl -m u:sddm:x "$HOME"
+fi
+
+# Switch to sddm as the display manager (these dotfiles theme sddm specifically)
+if command -v sddm &>/dev/null; then
+    CURRENT_DM_UNIT="$(basename "$(readlink -f /etc/systemd/system/display-manager.service 2>/dev/null)" 2>/dev/null || true)"
+    if [ "$CURRENT_DM_UNIT" != "sddm.service" ]; then
+        echo "Switching display manager to sddm..."
+        if [ -n "$CURRENT_DM_UNIT" ]; then
+            sudo systemctl disable --now "$CURRENT_DM_UNIT"
+        fi
+        sudo systemctl enable --now sddm.service
+    else
+        echo "sddm is already the active display manager."
+    fi
 fi
 
 echo "Done."
