@@ -8,7 +8,11 @@ qt5-graphicaleffects
 qt5-svg
 sddm
 hyprlock
-swaync
+gtk-layer-shell
+python-dbus
+python-gobject
+imagemagick
+jq
 neovim
 uv
 nodejs

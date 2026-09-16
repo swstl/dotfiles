@@ -56,47 +56,48 @@ fi
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-# 1. Render the text into a flat rectangle (auto-shrinks to fit via caption:),
-#    then extend it onto a canvas the size of the full base image, anchored
-#    at the top-left (0,0) - this is our "source" rectangle for the warp.
-magick -size "${SRC_W}x${SRC_H}" -background none -fill "$COLOR" -font "$FONT" \
+N_SHAPES="$(jq -r ".\"$PROFILE\".occlusion_polygons // [] | length" "$PROFILES")"
+
+# Steps 1-3 (render text, perspective-warp it, composite onto the base image)
+# fused into a single ImageMagick call via a sub-image group "( ... )" -
+# same operations/order as before, just one process instead of three, and no
+# intermediate files hitting disk. If there's no occlusion to apply, write
+# straight to the final output; otherwise write to a fast intermediate format
+# (.mpc - uncompressed, skips PNG encode/decode) for the occlusion pass below.
+if (( N_SHAPES == 0 )); then
+    TEXT_TARGET="$OUTPUT"
+else
+    TEXT_TARGET="$TMP_DIR/composited.mpc"
+fi
+
+magick "$IMAGE" \( \
+    -size "${SRC_W}x${SRC_H}" -background none -fill "$COLOR" -font "$FONT" \
     -gravity center caption:"$TEXT" \
     -background none -gravity NorthWest -extent "${CANVAS_W}x${CANVAS_H}" \
-    "$TMP_DIR/flat.png"
-
-# 2. Perspective-warp the source rectangle's 4 corners onto the configured
-#    destination quad, keeping the canvas size fixed so it aligns with the
-#    base image.
-magick "$TMP_DIR/flat.png" -virtual-pixel transparent -distort Perspective \
+    -virtual-pixel transparent -distort Perspective \
     "0,0,${DST_TL_X},${DST_TL_Y}  ${SRC_W},0,${DST_TR_X},${DST_TR_Y}  ${SRC_W},${SRC_H},${DST_BR_X},${DST_BR_Y}  0,${SRC_H},${DST_BL_X},${DST_BL_Y}" \
     -set option:distort:viewport "${CANVAS_W}x${CANVAS_H}+0+0" \
-    "$TMP_DIR/warped.png"
+\) -composite "$TEXT_TARGET"
 
-# 3. Composite the warped text onto a fresh copy of the base image.
-magick "$IMAGE" "$TMP_DIR/warped.png" -composite "$TMP_DIR/composited.png"
-
-# 4. Re-paste anything marked as "occlusion" (e.g. fingers) from the ORIGINAL
-#    image back on top, so it still appears in front of the text.
-N_SHAPES="$(jq -r ".\"$PROFILE\".occlusion_polygons // [] | length" "$PROFILES")"
-CURRENT="$TMP_DIR/composited.png"
-for ((i = 0; i < N_SHAPES; i++)); do
-    SHAPE=($(jq -r ".\"$PROFILE\".occlusion_polygons[$i][]" "$PROFILES"))
-    # Build "x,y x,y x,y ..." pairs for -draw polygon
-    POLY_POINTS=""
-    for ((j = 0; j < ${#SHAPE[@]}; j += 2)); do
-        POLY_POINTS="$POLY_POINTS ${SHAPE[j]},${SHAPE[j+1]}"
+# Re-paste anything marked as "occlusion" (e.g. fingers) from the ORIGINAL
+# image back on top, so it still appears in front of the text. All shapes are
+# combined into one mask (one -draw per polygon) so this is a single extra
+# ImageMagick call regardless of how many shapes are marked.
+if (( N_SHAPES > 0 )); then
+    DRAW_ARGS=()
+    for ((i = 0; i < N_SHAPES; i++)); do
+        SHAPE=($(jq -r ".\"$PROFILE\".occlusion_polygons[$i][]" "$PROFILES"))
+        POLY_POINTS=""
+        for ((j = 0; j < ${#SHAPE[@]}; j += 2)); do
+            POLY_POINTS="$POLY_POINTS ${SHAPE[j]},${SHAPE[j+1]}"
+        done
+        DRAW_ARGS+=(-draw "polygon $POLY_POINTS")
     done
 
-    magick -size "${CANVAS_W}x${CANVAS_H}" xc:black -fill white \
-        -draw "polygon $POLY_POINTS" "$TMP_DIR/mask_$i.png"
-
-    magick "$IMAGE" "$TMP_DIR/mask_$i.png" -alpha off -compose CopyOpacity -composite \
-        "$TMP_DIR/cutout_$i.png"
-
-    magick "$CURRENT" "$TMP_DIR/cutout_$i.png" -composite "$TMP_DIR/step_$i.png"
-    CURRENT="$TMP_DIR/step_$i.png"
-done
-
-cp "$CURRENT" "$OUTPUT"
+    magick "$TEXT_TARGET" \( \
+        "$IMAGE" \( -size "${CANVAS_W}x${CANVAS_H}" xc:black -fill white "${DRAW_ARGS[@]}" \) \
+        -alpha off -compose CopyOpacity -composite \
+    \) -compose Over -composite "$OUTPUT"
+fi
 
 echo "$OUTPUT"

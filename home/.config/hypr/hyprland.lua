@@ -26,7 +26,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("blueman-applet") -- systray app for Bluetooth
     hl.exec_cmd("udiskie --no-automount --smart-tray") -- front-end that allows to manage removable media
     hl.exec_cmd("nm-applet --indicator") -- systray app for Network/Wifi
-    hl.exec_cmd("swaync") -- start notification demon
+    hl.exec_cmd("notif_daemon") -- start notification demon
     hl.exec_cmd("wl-paste --type text --watch cliphist store") -- clipboard store text data
     hl.exec_cmd("wl-paste --type image --watch cliphist store") -- clipboard store image data
     hl.exec_cmd("swwwallpaper") -- start wallpaper daemon

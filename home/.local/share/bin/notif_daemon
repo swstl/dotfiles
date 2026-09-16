@@ -1,0 +1,2 @@
+#!/bin/bash
+exec python3 "$HOME/.dotfiles/notification/notif_daemon.py"
