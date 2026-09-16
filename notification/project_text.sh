@@ -30,7 +30,7 @@ fi
 
 profile_field() { jq -r ".\"$PROFILE\".$1" "$PROFILES"; }
 
-IMAGE="$SCRIPT_DIR/$(profile_field image)"
+IMAGE="$SCRIPT_DIR/baked/$(profile_field image)"
 CANVAS_W="$(profile_field canvas_width)"
 CANVAS_H="$(profile_field canvas_height)"
 SRC_W="$(profile_field src_width)"
@@ -44,6 +44,14 @@ DST_TL_X=${DST[0]}; DST_TL_Y=${DST[1]}
 DST_TR_X=${DST[2]}; DST_TR_Y=${DST[3]}
 DST_BR_X=${DST[4]}; DST_BR_Y=${DST[5]}
 DST_BL_X=${DST[6]}; DST_BL_Y=${DST[7]}
+
+# src_width/src_height must fit within the canvas, or the -extent step below
+# crops instead of scales, silently mangling the text (bunched to one side).
+if (( SRC_W > CANVAS_W || SRC_H > CANVAS_H )); then
+    echo "error: profile '$PROFILE' has src_width/src_height (${SRC_W}x${SRC_H}) bigger than its canvas (${CANVAS_W}x${CANVAS_H})." >&2
+    echo "       Fix the src_width/src_height values in text_profiles.json (usually happens after switching to a different-sized image)." >&2
+    exit 1
+fi
 
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
@@ -65,6 +73,30 @@ magick "$TMP_DIR/flat.png" -virtual-pixel transparent -distort Perspective \
     "$TMP_DIR/warped.png"
 
 # 3. Composite the warped text onto a fresh copy of the base image.
-magick "$IMAGE" "$TMP_DIR/warped.png" -composite "$OUTPUT"
+magick "$IMAGE" "$TMP_DIR/warped.png" -composite "$TMP_DIR/composited.png"
+
+# 4. Re-paste anything marked as "occlusion" (e.g. fingers) from the ORIGINAL
+#    image back on top, so it still appears in front of the text.
+N_SHAPES="$(jq -r ".\"$PROFILE\".occlusion_polygons // [] | length" "$PROFILES")"
+CURRENT="$TMP_DIR/composited.png"
+for ((i = 0; i < N_SHAPES; i++)); do
+    SHAPE=($(jq -r ".\"$PROFILE\".occlusion_polygons[$i][]" "$PROFILES"))
+    # Build "x,y x,y x,y ..." pairs for -draw polygon
+    POLY_POINTS=""
+    for ((j = 0; j < ${#SHAPE[@]}; j += 2)); do
+        POLY_POINTS="$POLY_POINTS ${SHAPE[j]},${SHAPE[j+1]}"
+    done
+
+    magick -size "${CANVAS_W}x${CANVAS_H}" xc:black -fill white \
+        -draw "polygon $POLY_POINTS" "$TMP_DIR/mask_$i.png"
+
+    magick "$IMAGE" "$TMP_DIR/mask_$i.png" -alpha off -compose CopyOpacity -composite \
+        "$TMP_DIR/cutout_$i.png"
+
+    magick "$CURRENT" "$TMP_DIR/cutout_$i.png" -composite "$TMP_DIR/step_$i.png"
+    CURRENT="$TMP_DIR/step_$i.png"
+done
+
+cp "$CURRENT" "$OUTPUT"
 
 echo "$OUTPUT"
