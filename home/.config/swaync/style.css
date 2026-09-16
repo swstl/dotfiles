@@ -86,12 +86,12 @@ notificationwindow, blankwindow {
   border: none;
   padding: 0;
   transition: var(--hover-tranistion);
-  min-height: 379px;
+  min-height: 304px;
   background-color: transparent;
-  background-image: url("/home/swstl/.dotfiles/notification/spirk_notif_final.png");
+  background-image: url("/home/swstl/.dotfiles/notification/wtf_notif_final.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 380px 379px;
+  background-size: 380px 304px;
 }
 
 .notification-row .notification-background .notification.low {
