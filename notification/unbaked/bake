@@ -1,0 +1,6 @@
+magick unbaked/bok6_redid.png -background none -rotate -70 bok.png && magick bok.png -gravity West -crop 1120x1400+0+0 +repage bok6.png && viu bok6.png
+magick unbaked/bok5_redid.png -background none -rotate -70 bok.png && magick bok.png -gravity West -crop 1120x1400+0+0 +repage bok5.png && viu bok5.png
+magick unbaked/bok4_redid.png -background none -rotate -70 bok.png && magick bok.png -gravity West -crop 1120x1600+0+0 +repage bok4.png && viu bok4.png
+magick unbaked/bok3_redid.png -background none -rotate -50 bok.png && magick bok.png -gravity West -crop 1000x1600+0+0 +repage bok3.png && viu bok3.png
+magick unbaked/bok2_redid.png -background none -rotate -50 bok.png && magick bok.png -gravity West -crop 1000x2000+0+0 +repage bok2.png && viu bok2.png
+magick unbaked/bok1_redid.png -background none -rotate -50 bok.png && magick bok.png -gravity West -crop 1000x1500+0+0 +repage bok1.png && viu bok1.png

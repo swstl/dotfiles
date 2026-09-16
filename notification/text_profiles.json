@@ -1,0 +1,12 @@
+{
+  "bok1": {
+    "image": "bok1_notif_final.png",
+    "canvas_width": 380,
+    "canvas_height": 523,
+    "src_width": 220,
+    "src_height": 150,
+    "dst": [170, 90, 275, 105, 255, 245, 150, 225],
+    "font": "DejaVu-Sans-Bold",
+    "color": "white"
+  }
+}

@@ -4,11 +4,11 @@
   font-family: "JetBrainsMono Nerd Font";
   font-weight: bold;
   font-size: 15px;
-  min-height: 13px;
+  min-height: 10px;
 }
 
 window#waybar {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(20, 40, 80, 0.75);
 }
 
 window#waybar.empty {
@@ -27,8 +27,8 @@ window#waybar.empty {
 #custom-right,
 #custom-left {
   color: #add8e6; /* Light Blue */
-  background: #000000; /* Black */
-  margin: 4px 0px 4px 0px;
+  background: transparent;
+  margin: 0px;
   opacity: 1;
   border: 0px solid #181825;
 }
@@ -80,8 +80,13 @@ tooltip {
 
 #custom-rofi {
   color: #add8e6; /* Light Blue */
-  padding-left: 0px;
+  padding-left: 26px;
   padding-right: 10px;
+  min-width: 20px;
+  background-image: url("/usr/share/pixmaps/archlinux-logo.svg");
+  background-repeat: no-repeat;
+  background-position: 4px center;
+  background-size: 20px 20px;
 }
 
 #temperature {
@@ -104,8 +109,16 @@ tooltip {
 
 #pulseaudio {
   color: #add8e6; /* Light Blue */
-  padding-left: 0px;
+  padding-left: 26px;
   padding-right: 19px;
+  background-image: url("/usr/share/icons/breeze/status/22/audio-volume-high.svg");
+  background-repeat: no-repeat;
+  background-position: 4px center;
+  background-size: 18px 18px;
+}
+
+#pulseaudio.muted {
+  background-image: url("/usr/share/icons/breeze/status/22/audio-volume-muted.svg");
 }
 
 #battery {
@@ -120,25 +133,44 @@ tooltip {
 }
 
 #network {
-  padding-left: 0px;
+  padding-left: 26px;
   padding-right: 19px;
   min-width: 100px;
+  background-repeat: no-repeat;
+  background-position: 4px center;
+  background-size: 18px 18px;
+}
+
+#network.wifi {
+  background-image: url("/usr/share/icons/breeze/devices/16/network-wireless-connected-100.svg");
+}
+
+#network.ethernet {
+  background-image: url("/usr/share/icons/breeze/devices/16/network-wired-activated.svg");
+}
+
+#network.disconnected {
+  background-image: url("/usr/share/icons/breeze/status/22/network-offline.svg");
+}
+
+#network.linked {
+  background-image: url("/usr/share/icons/breeze/devices/16/network-wired-unavailable.svg");
 }
 
 #clock {
   color: #add8e6; /* Light Blue */
-  padding-left: 0px;
+  padding-left: 26px;
   padding-right: 0px;
+  background-image: url("/usr/share/icons/breeze/preferences/22/preferences-system-time.svg");
+  background-repeat: no-repeat;
+  background-position: 4px center;
+  background-size: 18px 18px;
 }
 
 #custom-right {
-  margin-right: 9px;
   padding-right: 3px;
-  border-radius: 0px 22px 22px 0px;
 }
 
 #custom-left {
-  margin-left: 9px;
   padding-left: 3px;
-  border-radius: 22px 0px 0px 22px;
 }
