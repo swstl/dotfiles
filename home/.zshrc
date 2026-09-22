@@ -319,24 +319,39 @@ assets-list() {
   fi
 }
 
-# Mount the whole bucket as a read-only folder at ./game-assets.
+# Mount the whole bucket, or just one subfolder, as a read-only folder.
 # Files download lazily (only what you actually open) and are cached,
 # so you can browse/view in f3d, image viewers, etc. without pulling
-# everything. Optional arg = a different mountpoint.
-#   assets-mount             -> mount at $PWD/game-assets
-#   assets-mount ~/foo       -> mount there instead
+# everything.
+#   assets-mount                        -> whole bucket at $PWD/game-assets
+#   assets-mount models                 -> minio:game-assets/models at $PWD/models
+#   assets-mount combined/nature        -> that subfolder at $PWD/nature
+#   assets-mount combined/nature ~/foo  -> that subfolder at a custom mountpoint
 assets-mount() {
-  local mnt="${1:-$PWD/game-assets}"
+  local sub="${1:-}"
+  local default_mnt="$PWD/${sub:+${sub##*/}}"
+  default_mnt="${default_mnt:-$PWD/game-assets}"
+  local mnt="${2:-$default_mnt}"
+  local remote="minio:game-assets${sub:+/$sub}"
   mkdir -p "$mnt"
-  rclone mount minio:game-assets "$mnt" \
-    --vfs-cache-mode full --read-only --daemon
-  echo "mounted minio:game-assets at $mnt"
+  if rclone mount "$remote" "$mnt" \
+    --vfs-cache-mode full --read-only --daemon; then
+    echo "mounted $remote at $mnt"
+  else
+    echo "failed to mount $remote at $mnt" >&2
+    return 1
+  fi
 }
 
-# Unmount it again. Same optional arg as assets-mount.
+# Unmount it again. Arg is the mountpoint path (not a subfolder).
 # Run from the same dir you mounted in (or pass the path explicitly).
 assets-unmount() {
   local mnt="${1:-$PWD/game-assets}"
-  fusermount -u "$mnt" && echo "unmounted $mnt" && rmdir "$mnt" 2>/dev/null
+  local unmount_bin="${commands[fusermount3]:-${commands[fusermount]}}"
+  if [[ -z "$unmount_bin" ]]; then
+    echo "no fusermount3/fusermount found on PATH" >&2
+    return 1
+  fi
+  "$unmount_bin" -u "$mnt" && echo "unmounted $mnt" && rmdir "$mnt" 2>/dev/null
 }
 # <<< rclone <-> godot assets <<<

@@ -33,6 +33,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("batterynotify") -- battery notification
     hl.exec_cmd("expressvpnctl connect netherlands-amsterdam") -- start VPN connection
     hl.exec_cmd("gsr-ui")
+    hl.exec_cmd("nvidia-smi -pl 400")
 end)
 
 
