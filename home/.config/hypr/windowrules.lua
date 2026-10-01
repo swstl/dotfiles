@@ -84,6 +84,8 @@ hl.window_rule({ match = { class = "io.gitlab.adhami3310.Impression" }, float = 
 hl.window_rule({ match = { class = "io.missioncenter.MissionCenter" }, float = true }) -- MissionCenter-Gtk
 
 hl.window_rule({ match = { class = "steam", title = "negative:^steam$" }, float = true, center = true })
+hl.window_rule({ match = { class = "desktoppet"}, float = true, pin = true, no_blur = true, no_focus = true, no_shadow = true, border_size = 0 })
+
 
 
 -- █░░ ▄▀█ █▄█ █▀▀ █▀█   █▀█ █░█ █░░ █▀▀ █▀

@@ -15,6 +15,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import textwrap
 from pathlib import Path
 
 import dbus
@@ -47,6 +48,20 @@ TAG_RE = re.compile(r"<[^>]+>")
 
 def strip_markup(text):
     return TAG_RE.sub("", text or "").strip()
+
+
+# Tune these: WRAP_WIDTH = max chars per line (longer words get split),
+# MAX_LINES = lines kept before cutting off with "…".
+WRAP_WIDTH = 22
+MAX_LINES = 5
+
+
+def fit_text(text):
+    lines = [line for para in text.split("\n") for line in textwrap.wrap(para, WRAP_WIDTH) or [""]]
+    if len(lines) > MAX_LINES:
+        lines = lines[:MAX_LINES]
+        lines[-1] = lines[-1][: WRAP_WIDTH - 1].rstrip() + "…"
+    return "\n".join(lines)
 
 
 def load_profile_names():
@@ -169,7 +184,7 @@ class NotifDaemon(dbus.service.Object):
     ):
         summary = strip_markup(str(summary))
         body = strip_markup(str(body))
-        text = f"{summary}\n{body}".strip() if body else summary
+        text = fit_text(f"{summary}\n{body}".strip() if body else summary)
 
         profiles = load_profile_names()
         profile = random.choice(profiles)

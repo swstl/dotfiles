@@ -23,7 +23,7 @@ SECONDS_PER_ROTATION = 14.0
 FRAME_INTERVAL_MS = 16
 GLOW_SCALE = 1.06     # glow drawn slightly larger than the sharp circle
 GLOW_OPACITY = 0.35   # keep this low for a subtle glow, not a bloom
-BACKDROP_DIAMETER = 640
+BACKDROP_DIAMETER = 648   # ring edge in PNG ends ~323px radius; 324 = gap before next ring
 BACKDROP_OPACITY = 0.8
 BACKDROP_COLOR = (17 / 255, 17 / 255, 27 / 255)
 

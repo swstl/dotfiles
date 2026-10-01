@@ -24,7 +24,7 @@ return {
         -- Your repl definitions come here
         repl_definition = {
           python = {
-            command = { "ipython", "--no-autoindent" },
+            command = { "uv", "run", "ipython", "--no-autoindent" },
             format = common.bracketed_paste_python,
             block_dividers = { "# %%", "#%%" }, -- Support for Jupyter-style cells
           },
