@@ -5,6 +5,7 @@ on a transparent, click-through surface sitting just below rofi's layer,
 matched in size/position. Runs until killed (SIGTERM/SIGINT)."""
 
 import math
+import os
 import signal
 import sys
 
@@ -15,8 +16,8 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("GtkLayerShell", "0.1")
 from gi.repository import Gtk, GtkLayerShell, GLib, Gdk
 
-IMAGE_PATH = "/home/swstl/.config/rofi/assets/zoltraak-circle.png"
-GLOW_IMAGE_PATH = "/home/swstl/.config/rofi/assets/zoltraak-circle-glow.png"
+IMAGE_PATH = os.path.expanduser("~/.config/rofi/assets/zoltraak-circle.png")
+GLOW_IMAGE_PATH = os.path.expanduser("~/.config/rofi/assets/zoltraak-circle-glow.png")
 CIRCLE_SIZE = 800     # visual circle diameter, must match rofi window width/height in px
 WINDOW_SIZE = 1100    # canvas size, bigger than CIRCLE_SIZE so the glow has room to fade out
 SECONDS_PER_ROTATION = 14.0

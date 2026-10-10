@@ -1,1 +1,2 @@
 .config/helix/runtime/grammars/sources/*
+__pycache__/
