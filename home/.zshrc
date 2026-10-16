@@ -214,8 +214,9 @@ export PATH="$PATH:~/.gem/ruby/3.3.0/bin"
 # <<< ruby <<<
 
 # >>> java >>>
-export JAVA_HOME=/opt/jdk-23
+export JAVA_HOME=/usr/lib/jvm/java-27-openjdk
 export PATH=$JAVA_HOME/bin:$PATH
+export GHIDRA_INSTALL_DIR=/opt/ghidra
 # <<< java <<<
 
 # >>> emscripten (webassembly:) >>> 
